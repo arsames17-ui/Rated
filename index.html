@@ -1,0 +1,2930 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="theme-color" content="#0a0a0b"/>
+<title>نمره‌دهی</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700;800&family=Vazirmatn:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+  --bg:#08080a; --surface:#121216; --surface2:#1a1a20; --elevated:#24242c;
+  --accent:#ffc107; --accent2:#ffb300; --text:#f5f5f7; --muted:#9090a0;
+  --border:#2c2c34; --danger:#ff453a; --ok:#32d74b; --radius:18px;
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --glow:rgba(255,193,7,.18);
+}
+[data-theme="light"] {
+  --bg:#f0f0f3; --surface:#ffffff; --surface2:#ebebf0; --elevated:#e2e2e8;
+  --accent:#d4a017; --accent2:#c4920f; --text:#12121a; --muted:#65657a;
+  --border:#d4d4dc; --danger:#e0352b; --ok:#248a3d;
+  --glow:rgba(212,160,23,.15);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;font-family:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+img{-webkit-user-drag:none;user-drag:none;-webkit-touch-callout:none}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
+html{overscroll-behavior-y:contain}
+body{font-family:'Vazirmatn','Noto Kufi Arabic','Inter',system-ui,Tahoma,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.55;padding-bottom:calc(88px + var(--safe-bottom));font-size:15px;position:relative;overscroll-behavior-y:contain}
+[lang="en"],.ltr-text,input[dir="ltr"]{font-family:'Inter','Vazirmatn',system-ui,sans-serif}
+body::before{content:'';position:fixed;top:-120px;right:-80px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,var(--glow) 0%,transparent 70%);pointer-events:none;z-index:0;filter:blur(10px)}
+.topbar,.screen{position:relative;z-index:1}
+.topbar{position:sticky;top:0;z-index:100;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;gap:10px}
+.icon-btn{width:40px;height:40px;border:none;background:color-mix(in srgb,var(--surface) 78%,transparent);backdrop-filter:blur(10px);border-radius:12px;color:var(--text);font-size:1.15rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.15s}
+.icon-btn:active{transform:scale(.94)}
+.theme-fab{width:58px;height:32px;border:none;border-radius:20px;background:linear-gradient(90deg,#1c2333,#2b3550);position:relative;cursor:pointer;flex-shrink:0;box-shadow:inset 0 1px 4px rgba(0,0,0,.35);transition:background .3s;overflow:hidden}
+[data-theme="light"] .theme-fab{background:linear-gradient(90deg,#bfe3ff,#eaf6ff)}
+.theme-fab .tf-icons{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 8px;font-size:.72rem;color:rgba(255,255,255,.55)}
+[data-theme="light"] .theme-fab .tf-icons{color:rgba(0,40,80,.35)}
+.theme-fab .tf-knob{position:absolute;top:3px;right:3px;width:26px;height:26px;border-radius:50%;background:linear-gradient(145deg,var(--accent),#ffe066);box-shadow:0 2px 8px var(--glow),0 1px 3px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;color:#000;font-size:.82rem;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+[data-theme="light"] .theme-fab .tf-knob{transform:translateX(-26px);background:linear-gradient(145deg,#fff,#dfe9f5);color:#d4a017}
+.theme-fab:active .tf-knob{transform:scale(.9)}
+[data-theme="light"] .theme-fab:active .tf-knob{transform:translateX(-26px) scale(.9)}
+.top-title{flex:1;font-weight:700;font-size:1.08rem;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-title .badge{background:linear-gradient(135deg,var(--accent),#ffe066);color:#000;padding:3px 8px;border-radius:7px;font-size:.82rem;margin-left:6px;font-weight:800;box-shadow:0 1px 6px var(--glow)}
+.count{font-size:.75rem;color:var(--muted);background:var(--surface);padding:4px 10px;border-radius:20px;font-weight:500}
+.screen{display:none}.screen.active{display:block}
+.container{max-width:960px;margin:0 auto;padding:14px}
+.lists-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:12px}
+.home-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.home-head-label{font-size:.82rem;color:var(--muted);font-weight:700}
+.reorder-toggle{background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:20px;padding:7px 14px;font-size:.76rem;font-weight:700;font-family:inherit;cursor:pointer}
+.reorder-toggle.on{background:linear-gradient(135deg,var(--accent),#ffe066);color:#000;border-color:transparent}
+.list-card.drag-mode{cursor:grab;touch-action:none}
+.list-card.dragging{opacity:.35}
+.list-card.drag-ghost,.item-card.drag-ghost{position:fixed;z-index:500;pointer-events:none;box-shadow:0 20px 50px rgba(0,0,0,.6),0 0 0 2px var(--accent);transform:scale(1.06) rotate(1.5deg);transition:none!important;opacity:.97;border-radius:18px}
+.items-grid.reorderable .item-card{cursor:pointer}
+.items-grid.reorderable .item-card .drag-handle{cursor:grab;touch-action:none}
+.items-grid.reorderable .item-card .drag-handle:active{cursor:grabbing}
+.items-grid.reorderable .item-card.drag-ghost{cursor:grabbing}
+/* دستگیره کوچک پایین‌وسط — فقط این قسمت درگ رو شروع می‌کنه تا بقیه کارت قابل کلیک بمونه */
+.item-card .drag-handle{display:none;position:absolute;bottom:6px;left:50%;transform:translateX(-50%);width:36px;height:22px;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);color:rgba(255,255,255,.85);font-size:.65rem;align-items:center;justify-content:center;z-index:4;border-radius:10px;user-select:none;box-shadow:0 2px 8px rgba(0,0,0,.3);transition:background .15s,transform .15s}
+.item-card .drag-handle:hover{background:rgba(0,0,0,.75);transform:translateX(-50%) scale(1.08)}
+.items-grid.reorderable .item-card .drag-handle{display:flex}
+.size-list .item-card .drag-handle{position:static;transform:none;width:28px;height:28px;background:var(--surface2);color:var(--muted);border-radius:8px;box-shadow:none;flex-shrink:0}
+.size-list .item-card .drag-handle:hover{background:var(--elevated);transform:none}
+/* انیمیشن رها کردن نرم شبیه سامسونگ (spring) */
+.item-card.dropping{transition:transform .4s cubic-bezier(.22,1.2,.36,1),box-shadow .35s ease,opacity .3s ease!important;transform:scale(1) rotate(0)!important;box-shadow:0 4px 16px rgba(0,0,0,.2)!important}
+.list-card{background:linear-gradient(165deg,color-mix(in srgb,var(--surface2) 80%,transparent) 0%,color-mix(in srgb,var(--surface) 75%,transparent) 100%);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:var(--radius);padding:20px 16px;border:1px solid var(--border);cursor:pointer;position:relative;overflow:hidden;min-height:126px;display:flex;flex-direction:column;justify-content:flex-end;user-select:none;transition:transform .18s,box-shadow .18s,border-color .18s;box-shadow:0 2px 12px rgba(0,0,0,.2)}
+.list-card:hover{border-color:color-mix(in srgb,var(--accent) 40%,var(--border));box-shadow:0 6px 20px rgba(0,0,0,.28);transform:translateY(-2px)}
+.list-card:active{transform:scale(.97)}
+.list-card .bar{position:absolute;top:0;right:0;left:0;height:4px}
+.list-card .icon-wm{position:absolute;top:10px;left:12px;font-size:2.1rem;opacity:.14;line-height:1;filter:grayscale(1)}
+.list-card .name{font-weight:700;font-size:1rem;margin-bottom:3px;position:relative}
+.list-card .meta{font-size:.76rem;color:var(--muted);font-weight:500;position:relative}
+.list-card .series-tag{position:absolute;top:12px;left:12px;font-size:.65rem;background:var(--accent);color:#000;padding:2px 7px;border-radius:6px;font-weight:700}
+.add-list{border:2px dashed var(--border);background:transparent;align-items:center;justify-content:center;color:var(--muted);font-size:.88rem;gap:4px;font-weight:500}
+.view-bar{display:flex;gap:8px;margin-bottom:10px;align-items:center;flex-wrap:wrap}
+.list-switch{display:flex;align-items:center;gap:8px;background:color-mix(in srgb,var(--surface) 70%,transparent);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);border:1px solid var(--border);border-radius:16px;padding:8px 6px;margin-bottom:12px;touch-action:pan-y}
+.ls-arrow{width:34px;height:34px;flex-shrink:0;border:none;background:var(--surface2);color:var(--accent);border-radius:10px;font-size:1.1rem;font-weight:700;cursor:pointer}
+.ls-arrow:active{transform:scale(.92)}
+.ls-info{flex:1;text-align:center;overflow:hidden;user-select:none}
+.ls-info span{display:block}
+.ls-info #lsName{font-weight:700;font-size:.94rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ls-hint{font-size:.68rem;color:var(--muted);font-weight:500;margin-top:1px}
+.share-list-btn{width:38px;height:38px;flex-shrink:0;border:none;background:linear-gradient(145deg,var(--accent),var(--accent2));color:#000;border-radius:12px;font-size:1.15rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px var(--glow);transition:transform .15s,box-shadow .15s}
+.share-list-btn:hover{box-shadow:0 4px 16px var(--glow);transform:translateY(-1px)}
+.share-list-btn:active{transform:scale(.92)}
+.search{flex:1;min-width:120px;position:relative}
+.search input{width:100%;padding:10px 36px 10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:11px;color:var(--text);font-size:.9rem;font-family:inherit;outline:none}
+.search input:focus{border-color:var(--accent)}
+.search::before{content:"\f002";font-family:"Font Awesome 6 Free";font-weight:900;position:absolute;right:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.85rem}
+select.sel{padding:9px 11px;background:var(--surface);border:1px solid var(--border);border-radius:11px;color:var(--text);font-size:.82rem;font-family:inherit;outline:none}
+.view-btns{display:flex;background:var(--surface);border-radius:11px;border:1px solid var(--border);overflow:hidden}
+.view-btns button{width:34px;height:34px;border:none;background:transparent;color:var(--muted);cursor:pointer;font-size:.9rem}
+.view-btns button.active{background:var(--accent);color:#000}
+.list-stats{font-size:.76rem;color:var(--muted);margin-bottom:8px;font-weight:500}
+.filter-chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:6px;scrollbar-width:none}
+.filter-chips::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;padding:6px 12px;border-radius:20px;border:1px solid var(--border);background:color-mix(in srgb,var(--surface) 75%,transparent);backdrop-filter:blur(10px);color:var(--muted);font-size:.78rem;font-family:inherit;font-weight:500;cursor:pointer}
+.chip.active{background:var(--accent);color:#000;border-color:var(--accent);font-weight:700;box-shadow:0 2px 10px var(--glow)}
+.az-bar{display:flex;gap:0;margin-bottom:12px;overflow-x:auto;padding:4px;background:color-mix(in srgb,var(--surface) 72%,transparent);backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);border:1px solid var(--border);border-radius:14px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.az-bar::-webkit-scrollbar{display:none}
+.az-bar button{flex:1;min-width:28px;height:32px;border:none;border-radius:8px;background:transparent;color:var(--muted);font-size:.72rem;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.02em;transition:background .15s,color .15s,transform .1s}
+.az-bar button:active{transform:scale(.92)}
+.az-bar button.on{background:var(--accent);color:#000;box-shadow:0 2px 8px var(--glow)}
+.az-bar button.all-btn{min-width:40px;font-size:.7rem;font-weight:600}
+.items-grid{display:grid;gap:11px}
+.items-grid.size-lg{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.items-grid.size-md{grid-template-columns:repeat(auto-fill,minmax(122px,1fr))}
+.items-grid.size-sm{grid-template-columns:repeat(auto-fill,minmax(92px,1fr))}
+.items-grid.size-list{grid-template-columns:1fr;gap:7px}
+.item-card{background:color-mix(in srgb,var(--surface) 82%,transparent);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border-radius:16px;overflow:hidden;border:1px solid var(--border);cursor:pointer;position:relative;transition:transform .18s,box-shadow .18s;animation:cardIn .4s cubic-bezier(.22,1,.36,1) backwards;border-top:3px solid transparent;box-shadow:0 2px 10px rgba(0,0,0,.15)}
+.item-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.25);transform:translateY(-2px)}
+.item-card:active{transform:scale(.98)}
+@keyframes cardIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.item-card .num{position:absolute;top:6px;right:6px;background:rgba(0,0,0,.78);color:var(--accent);font-weight:700;font-size:.7rem;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:2}
+.item-card .pin-b{position:absolute;top:6px;left:6px;z-index:2;font-size:.8rem}
+.item-card .fav-btn{position:absolute;bottom:6px;left:6px;z-index:2;background:rgba(0,0,0,.6);border:none;color:#fff;width:24px;height:24px;border-radius:50%;font-size:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:transform .12s}
+.item-card .fav-btn:active{transform:scale(.85)}
+.item-card .fav-btn.on{color:#ff453a}
+.select-mode .item-card .fav-btn{display:none}
+.size-list .item-card .fav-btn{position:static;width:26px;height:26px;background:none;color:var(--muted);margin-right:2px;flex-shrink:0}
+.item-card .check{position:absolute;top:6px;left:6px;z-index:3;width:22px;height:22px;border-radius:6px;border:2px solid #fff;background:rgba(0,0,0,.4);display:none}
+.select-mode .item-card .check{display:block}
+.select-mode .item-card.selected .check{background:var(--accent);border-color:var(--accent)}
+.select-mode .item-card .pin-b{display:none}
+.item-card .poster{width:100%;aspect-ratio:2/3;object-fit:cover;background:#111;display:block}
+.item-card .poster.ph{display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:700;color:rgba(255,255,255,.85);background:linear-gradient(145deg,#2a2a35,#1a1a22)}
+.item-card .body{padding:7px 9px 9px}
+.item-card .title{font-weight:600;font-size:.84rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.item-card .meta{font-size:.72rem;color:var(--muted);margin-top:2px;display:flex;justify-content:space-between;align-items:center;font-weight:500}
+.item-card .star{color:var(--accent);font-weight:700}
+.size-list .item-card{display:flex;flex-direction:row;align-items:center;gap:10px;padding:7px;border-top-width:0;border-right:3px solid transparent}
+.size-list .item-card .poster,.size-list .item-card .poster.ph{width:48px;height:72px;aspect-ratio:auto;border-radius:6px;flex-shrink:0;font-size:1.2rem}
+.size-list .item-card .body{flex:1;padding:0}
+.size-list .item-card .num{position:static;background:transparent;color:var(--muted);width:auto;font-size:.8rem}
+.reorder-btns{display:flex;flex-direction:column;gap:2px;padding:2px 6px}
+.reorder-btn{border:1px solid var(--border);background:var(--surface2);color:var(--text);border-radius:6px;width:26px;height:22px;font-size:.65rem;cursor:pointer;font-family:inherit;line-height:1}
+.reorder-btn:disabled{opacity:.3;cursor:default}
+.size-list .reorder-btns{flex-direction:row}
+.bulk-bar{display:none;position:fixed;bottom:calc(16px + var(--safe-bottom));left:50%;transform:translateX(-50%);background:color-mix(in srgb,var(--elevated) 80%,transparent);backdrop-filter:blur(18px) saturate(1.5);-webkit-backdrop-filter:blur(18px) saturate(1.5);border:1px solid var(--border);border-radius:18px;padding:10px 14px;z-index:95;gap:10px;align-items:center;box-shadow:0 8px 30px rgba(0,0,0,.4)}
+.bulk-bar.show{display:flex}
+.bulk-bar button{padding:8px 14px;border-radius:10px;border:none;font-family:inherit;font-weight:600;font-size:.85rem;cursor:pointer}
+.fab{position:fixed;bottom:calc(20px + var(--safe-bottom));left:16px;width:56px;height:56px;border-radius:50%;background:linear-gradient(145deg,var(--accent),var(--accent2));color:#000;border:none;font-size:1.75rem;font-weight:300;box-shadow:0 6px 24px var(--glow),0 2px 8px rgba(0,0,0,.3);cursor:pointer;z-index:90;display:none;align-items:center;justify-content:center;transition:transform .15s,box-shadow .15s}
+.fab.show{display:flex}
+.fab:hover{box-shadow:0 8px 28px var(--glow),0 4px 12px rgba(0,0,0,.35)}
+.fab:active{transform:scale(.92)}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;opacity:0;pointer-events:none;transition:.25s}
+.overlay.show{opacity:1;pointer-events:auto}
+.side-menu{position:fixed;top:0;right:0;width:min(290px,84vw);height:100%;background:color-mix(in srgb,var(--surface) 78%,transparent);backdrop-filter:blur(22px) saturate(1.5);-webkit-backdrop-filter:blur(22px) saturate(1.5);z-index:210;transform:translateX(105%);transition:transform .28s ease;padding:16px 0;overflow-y:auto;border-left:1px solid var(--border)}
+.side-menu.show{transform:translateX(0)}
+.side-menu .head{padding:6px 18px 14px;font-weight:700;font-size:1.08rem;color:var(--accent);border-bottom:1px solid var(--border);margin-bottom:6px}
+.side-menu .item{display:flex;align-items:center;gap:10px;padding:12px 18px;color:var(--text);font-size:.9rem;cursor:pointer;border:none;background:none;width:100%;text-align:right;font-family:inherit;font-weight:500}
+.side-menu .item:active{background:var(--surface2)}
+.side-menu .sep{height:1px;background:var(--border);margin:6px 14px}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:300;display:none;align-items:flex-end;justify-content:center}
+.modal-bg.show{display:flex}
+.modal{background:color-mix(in srgb,var(--surface) 85%,transparent);backdrop-filter:blur(24px) saturate(1.5);-webkit-backdrop-filter:blur(24px) saturate(1.5);width:100%;max-width:520px;max-height:92vh;border-radius:22px 22px 0 0;overflow-y:auto;padding:20px 18px 34px;animation:up .28s cubic-bezier(.22,1,.36,1);box-shadow:0 -8px 40px rgba(0,0,0,.4);border:1px solid var(--border);border-bottom:none}
+@keyframes up{from{transform:translateY(100%)}to{transform:none}}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.modal-head h2{font-size:1.12rem;color:var(--accent);font-weight:700}
+.close{background:none;border:none;color:var(--muted);font-size:1.5rem;cursor:pointer;line-height:1}
+.fg{margin-bottom:12px}
+.fg label{display:block;margin-bottom:4px;font-size:.78rem;color:var(--muted);font-weight:500}
+.fg input,.fg textarea,.fg select{width:100%;padding:10px 12px;background:color-mix(in srgb,var(--bg) 70%,transparent);backdrop-filter:blur(6px);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:.9rem;font-family:inherit}
+.fg textarea{min-height:64px;resize:vertical}
+.fg input:focus,.fg textarea:focus,.fg select:focus{outline:none;border-color:var(--accent)}
+.title-row{display:flex;gap:6px}
+.title-row input{flex:1}
+.search-btn{padding:0 14px;background:var(--accent);color:#000;border:none;border-radius:10px;font-weight:700;font-size:.84rem;cursor:pointer;font-family:inherit;white-space:nowrap}
+.lookup-box{max-height:200px;overflow-y:auto;margin-top:8px;border:1px solid var(--border);border-radius:10px;display:none}
+.lookup-box.show{display:block}
+.lookup-item{display:flex;gap:10px;padding:9px;border-bottom:1px solid var(--border);cursor:pointer}
+.lookup-item:active{background:var(--surface2)}
+.lookup-item img{width:40px;height:60px;object-fit:cover;border-radius:4px;background:#111}
+.lookup-item .t{font-weight:600;font-size:.86rem}
+.lookup-item .m{font-size:.72rem;color:var(--muted)}
+.preview{width:90px;height:135px;object-fit:cover;border-radius:8px;margin-top:8px;display:none;background:#111}
+.preview.show{display:block}
+.file-btn{display:inline-block;padding:8px 12px;background:var(--bg);border:1px dashed var(--border);border-radius:8px;cursor:pointer;font-size:.82rem;color:var(--muted);font-family:inherit}
+.file-btn input{display:none}
+.actions{display:flex;gap:8px;margin-top:16px}
+.actions .btn{flex:1}
+.btn{padding:11px;border-radius:10px;border:none;font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit}
+.btn-main{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#000;box-shadow:0 2px 12px var(--glow)}
+.btn-main:active{filter:brightness(.95)}
+.btn-danger{background:transparent;color:var(--danger);border:1px solid var(--danger)}
+.btn-ghost{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
+.pin-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:11px;font-family:inherit;font-size:.9rem;font-weight:600;cursor:pointer;flex:1}
+.view-only-banner{display:none;background:linear-gradient(90deg,#3a2f00,#4a3a00);color:#ffd60a;font-size:.78rem;font-weight:700;text-align:center;padding:7px 10px;border-bottom:1px solid var(--border)}
+body.view-only .view-only-banner{display:block}
+body.view-only #fab,body.view-only #reorderListsBtn,body.view-only #selectModeBtn,
+body.view-only .item-card .fav-btn,body.view-only #pinBtn,body.view-only #favToggleBtn,
+body.view-only #editBtn,body.view-only #episodesBtn,body.view-only #seenBtn,body.view-only #linkWatchlistBtn,body.view-only .reorder-btns,
+body.view-only #detailModal .actions,
+body.view-only #addListCard,body.view-only .bulk-bar,
+body.view-only .side-menu .item[data-action="ratingColors"],
+body.view-only .side-menu .item[data-action="export"],
+body.view-only .side-menu .item[data-action="import"],
+body.view-only .side-menu .item[data-action="dups"],
+body.view-only .side-menu .item[data-action="apikey"],
+body.view-only .side-menu .item[data-action="fresh"],
+body.view-only #shareListBtn,
+body.view-only #userCard,
+body.view-only #authModal{display:none!important}
+body.view-only .item-card{cursor:pointer!important}
+
+.rband-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)}
+.rband-row input[type=color]{width:38px;height:38px;border:1px solid var(--border);border-radius:10px;background:none;cursor:pointer;padding:2px;flex-shrink:0}
+.rband-row .rband-label{font-size:.8rem;color:var(--muted);white-space:nowrap}
+.rband-row input[type=number]{width:64px;padding:8px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.86rem}
+.rband-row .rband-del{width:30px;height:30px;flex-shrink:0;border:none;background:var(--surface2);color:var(--danger);border-radius:8px;cursor:pointer;font-size:.8rem}
+.colors{display:flex;flex-wrap:wrap;gap:7px;margin-top:5px}
+.cdot{width:28px;height:28px;border-radius:50%;border:3px solid transparent;cursor:pointer}
+.cdot.on{border-color:#fff;transform:scale(1.12)}
+.tog{width:44px;height:25px;background:#333;border-radius:13px;position:relative;cursor:pointer;transition:.2s;flex-shrink:0}
+.tog.on{background:var(--accent)}
+.tog::after{content:'';position:absolute;top:3px;right:3px;width:19px;height:19px;background:#fff;border-radius:50%;transition:.2s}
+.tog.on::after{transform:translateX(-19px)}
+.row-tog{display:flex;align-items:center;justify-content:space-between;padding:8px 0}
+.detail-poster-wrap{position:relative;width:100%;max-height:340px;border-radius:12px;margin-bottom:10px;background:#111;overflow:hidden;cursor:pointer}
+.detail-poster-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:blur(18px) brightness(.55);transform:scale(1.15)}
+.detail-poster{position:relative;width:100%;max-height:340px;object-fit:contain;display:block;margin:0 auto}
+.detail-title{font-size:1.25rem;margin-bottom:6px;font-weight:700}
+.detail-meta{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px;font-size:.84rem;color:var(--muted)}
+.badge{padding:3px 9px;border-radius:12px;font-size:.74rem;font-weight:600}
+.detail-star{color:var(--accent);font-weight:700;font-size:1.1rem}
+.detail-notes{background:var(--bg);padding:11px;border-radius:10px;white-space:pre-wrap;margin-bottom:12px;line-height:1.6;font-size:.86rem}
+.detail-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.detail-tags span{font-size:.75rem;background:var(--surface2);padding:3px 8px;border-radius:8px;color:var(--accent)}
+.poster-full{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:500;display:none;align-items:center;justify-content:center;padding:16px;cursor:pointer}
+.poster-full.show{display:flex}
+.poster-full img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px}
+.ctx-menu{position:fixed;background:color-mix(in srgb,var(--elevated) 82%,transparent);backdrop-filter:blur(18px) saturate(1.5);-webkit-backdrop-filter:blur(18px) saturate(1.5);border:1px solid var(--border);border-radius:14px;padding:5px 0;z-index:250;min-width:155px;box-shadow:0 8px 28px rgba(0,0,0,.45);display:none}
+.ctx-menu.show{display:block}
+.ctx-menu button{display:block;width:100%;padding:10px 14px;border:none;background:none;color:var(--text);font-family:inherit;font-size:.88rem;text-align:right;cursor:pointer}
+.ctx-menu button.danger{color:var(--danger)}
+.toast{position:fixed;bottom:calc(84px + var(--safe-bottom));left:50%;transform:translateX(-50%) translateY(12px);background:#2a2a2e;color:#fff;padding:9px 16px;border-radius:20px;font-size:.84rem;opacity:0;transition:.28s;z-index:400;pointer-events:none;font-weight:500}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+[data-theme="light"] .toast{background:#333}
+.hint{font-size:.74rem;color:var(--muted);margin-top:4px;line-height:1.5}
+.hint a{color:var(--accent)}
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty .icon{font-size:3.2rem;opacity:.3;margin-bottom:10px;filter:grayscale(1)}
+.load-more{display:block;width:100%;padding:12px;margin-top:12px;background:color-mix(in srgb,var(--surface) 75%,transparent);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:14px;color:var(--text);font-family:inherit;font-weight:600;cursor:pointer}
+.ep-season{margin-bottom:10px;border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.ep-season-head{display:flex;justify-content:space-between;align-items:center;width:100%;padding:11px 13px;background:var(--surface2);border:none;color:var(--text);font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;text-align:right}
+.ep-season-meta{display:flex;align-items:center;gap:6px;font-size:.76rem;color:var(--muted);font-weight:600}
+.ep-chevron{color:var(--accent);font-size:.7rem}
+.ep-season-body{padding:2px 13px 6px}
+.ep-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.ep-row .ep-num{font-size:.78rem;color:var(--muted);width:36px;flex-shrink:0;font-weight:600}
+.ep-row .ep-title{flex:1;font-size:.86rem;font-weight:500}
+.ep-row input[type=number]{width:64px;padding:6px 8px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:.85rem}
+.page-indicator{text-align:center;font-size:.75rem;color:var(--muted);margin-top:8px}
+@media(min-width:600px){
+  .modal-bg{align-items:center;padding:20px}
+  .modal{border-radius:16px;max-height:85vh}
+}
+/* بازشدن جزئیات: تو موبایل از پایین می‌سُره بالا، تو دسکتاپ با زوم و درخشش وسط صفحه باز می‌شه */
+#detailModal .modal{position:relative;border-top:1px solid var(--border)}
+#detailModal .modal::before{content:'';position:absolute;top:0;right:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),transparent 70%);border-radius:22px 22px 0 0}
+@media(min-width:600px){
+  #detailModal .modal{animation:detailZoom .38s cubic-bezier(.22,1,.36,1);box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 0 1px var(--border);border-radius:20px}
+  #detailModal .modal::before{border-radius:20px 20px 0 0}
+}
+@keyframes detailZoom{from{opacity:0;transform:scale(.93) translateY(14px)}to{opacity:1;transform:none}}
+
+/* ========== طراحی حرفه‌ای برای دسکتاپ / کامپیوتر ========== */
+@media (min-width:900px){
+  body{font-size:15.5px;padding-bottom:calc(100px + var(--safe-bottom))}
+  .container{max-width:1080px;padding:20px 24px}
+  .topbar{padding:14px 24px}
+  .top-title{font-size:1.15rem}
+  .lists-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px}
+  .list-card{min-height:140px;padding:24px 18px;border-radius:20px}
+  .list-card:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(0,0,0,.3)}
+  .items-grid.size-lg{grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}
+  .items-grid.size-md{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+  .items-grid.size-sm{grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
+  .item-card{border-radius:18px;transition:transform .2s,box-shadow .2s,border-color .2s}
+  .item-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(0,0,0,.28)}
+  .item-card .title{font-size:.88rem}
+  .view-bar{gap:10px;margin-bottom:14px}
+  .list-switch{padding:10px 10px;border-radius:18px;margin-bottom:16px}
+  .ls-arrow{width:38px;height:38px;border-radius:12px}
+  .share-list-btn{width:42px;height:42px;font-size:1.25rem;border-radius:14px}
+  .side-menu{width:300px}
+  .side-menu .item{padding:14px 20px;font-size:.95rem}
+  .fab{width:60px;height:60px;font-size:1.9rem;bottom:calc(28px + var(--safe-bottom));left:28px}
+  .modal{max-width:560px;padding:24px 22px 40px;border-radius:20px}
+  .detail-title{font-size:1.4rem}
+  .filter-chips{gap:8px;padding-bottom:10px}
+  .chip{padding:7px 14px;font-size:.82rem}
+  .az-bar{padding:6px;border-radius:16px;margin-bottom:14px}
+  .az-bar button{min-width:32px;height:34px;font-size:.75rem}
+  .search input{padding:11px 38px 11px 14px;font-size:.92rem}
+  select.sel{padding:10px 12px;font-size:.85rem}
+  .home-head{margin-bottom:16px}
+  .reorder-toggle{padding:8px 16px;font-size:.8rem}
+  .count{font-size:.8rem;padding:5px 12px}
+  /* دسکتاپ: منو با hover بهتر */
+  .side-menu .item:hover{background:var(--surface2)}
+  .icon-btn:hover{background:var(--surface2)}
+}
+@media (min-width:1200px){
+  .container{max-width:1200px}
+  .lists-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:18px}
+  .items-grid.size-lg{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+  .items-grid.size-md{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+}
+.suggest-sec{margin-bottom:18px}
+.suggest-sec h3{font-size:.95rem;color:var(--accent);margin-bottom:8px;font-weight:700;display:flex;align-items:center;gap:6px}
+.suggest-row{display:flex;flex-direction:column;gap:8px}
+.suggest-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:12px}
+.suggest-item .si-poster{width:42px;height:63px;object-fit:cover;border-radius:6px;background:#111;flex-shrink:0}
+.suggest-item .si-poster.ph{display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;color:rgba(255,255,255,.5)}
+.suggest-item .si-info{flex:1;min-width:0}
+.suggest-item .si-title{font-weight:600;font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.suggest-item .si-meta{font-size:.72rem;color:var(--muted);margin-top:2px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.suggest-item .si-imdb{color:#0a84ff;font-weight:700}
+.suggest-item .si-add{flex-shrink:0;padding:7px 12px;border:none;border-radius:10px;background:var(--accent);color:#000;font-family:inherit;font-weight:700;font-size:.78rem;cursor:pointer}
+.suggest-item .si-add:active{transform:scale(.95)}
+.suggest-empty{font-size:.84rem;color:var(--muted);padding:8px 0}
+
+/* ========== صفحه / مودال ورود و ثبت‌نام ابری ========== */
+.user-card{margin:8px 14px 12px;padding:14px;background:linear-gradient(145deg,color-mix(in srgb,var(--accent) 12%,var(--surface2)),var(--surface));border:1px solid color-mix(in srgb,var(--accent) 28%,var(--border));border-radius:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.user-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(145deg,var(--accent),#ffe066);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 14px var(--glow);overflow:hidden}
+.user-avatar img{width:100%;height:100%;object-fit:cover}
+.user-avatar .ua-icon{font-size:1.35rem;color:#000}
+.user-avatar .ua-letter{font-size:1.25rem;font-weight:800;color:#000}
+.user-info{flex:1;min-width:0}
+.user-info .ui-name{font-weight:700;font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-info .ui-status{font-size:.72rem;color:var(--muted);margin-top:2px}
+.user-login-btn{padding:8px 14px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#000;font-family:inherit;font-weight:700;font-size:.8rem;cursor:pointer;flex-shrink:0;box-shadow:0 2px 10px var(--glow)}
+.user-login-btn:active{transform:scale(.95)}
+.user-actions{display:none;flex-direction:column;gap:4px;width:100%;margin-top:4px}
+.user-card.logged-in .user-actions{display:flex}
+.user-card.logged-in .user-login-btn{display:none}
+.user-actions .ua-btn{display:flex;align-items:center;gap:8px;padding:9px 12px;border:1px solid var(--border);background:color-mix(in srgb,var(--bg) 50%,transparent);border-radius:11px;color:var(--text);font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;width:100%;text-align:right}
+.user-actions .ua-btn:active{background:var(--surface2)}
+.user-actions .ua-btn.danger{color:var(--danger);border-color:color-mix(in srgb,var(--danger) 35%,var(--border))}
+.auth-modal .modal{padding-bottom:28px}
+.auth-hero{text-align:center;margin-bottom:18px;padding-top:6px}
+.auth-hero-icon{width:72px;height:72px;margin:0 auto 12px;border-radius:22px;background:linear-gradient(145deg,var(--accent),#ffe066);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 28px var(--glow);font-size:2rem;color:#000;overflow:hidden}
+.auth-hero-icon img{width:100%;height:100%;object-fit:cover}
+.auth-hero h2{font-size:1.28rem;font-weight:800;margin-bottom:4px;color:var(--text)}
+.auth-hero p{font-size:.82rem;color:var(--muted);line-height:1.5}
+.auth-tabs{display:flex;background:var(--surface2);border-radius:14px;padding:4px;margin-bottom:16px;border:1px solid var(--border)}
+.auth-tab{flex:1;padding:10px;border:none;background:transparent;color:var(--muted);font-family:inherit;font-weight:700;font-size:.88rem;border-radius:11px;cursor:pointer;transition:.2s}
+.auth-tab.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#000;box-shadow:0 2px 10px var(--glow)}
+.auth-field{position:relative;margin-bottom:12px}
+.auth-field label{display:block;margin-bottom:5px;font-size:.78rem;color:var(--muted);font-weight:600}
+.auth-field .af-icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);margin-top:12px;color:var(--muted);font-size:.95rem;pointer-events:none;z-index:1}
+.auth-field input{width:100%;padding:12px 42px 12px 14px;background:color-mix(in srgb,var(--bg) 75%,transparent);border:1px solid var(--border);border-radius:13px;color:var(--text);font-size:.95rem;font-family:inherit;direction:ltr;text-align:left}
+.auth-field.with-toggle input{padding-left:46px}
+.auth-field input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--glow)}
+.auth-field input::placeholder{color:var(--muted);opacity:.7}
+.auth-toggle-pw{position:absolute;left:8px;top:50%;transform:translateY(-50%);margin-top:12px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:.82rem;width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;z-index:2;padding:0}
+.auth-toggle-pw:active{transform:translateY(-50%) scale(.92)}
+
+.auth-error{display:none;background:color-mix(in srgb,var(--danger) 15%,transparent);color:var(--danger);padding:10px 12px;border-radius:11px;font-size:.82rem;margin-bottom:12px;border:1px solid color-mix(in srgb,var(--danger) 30%,transparent)}
+.auth-error.show{display:block}
+.auth-submit{width:100%;padding:13px;border:none;border-radius:13px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#000;font-family:inherit;font-weight:800;font-size:.95rem;cursor:pointer;box-shadow:0 4px 16px var(--glow);margin-top:4px}
+.auth-submit:disabled{opacity:.55;cursor:default}
+.auth-submit:active:not(:disabled){transform:scale(.98)}
+.auth-hint{text-align:center;font-size:.74rem;color:var(--muted);margin-top:14px;line-height:1.55}
+.auth-hint strong{color:var(--accent)}
+</style>
+
+</head>
+<body>
+<div class="view-only-banner">👁️ حالت فقط نمایش — این یه نسخهٔ اشتراک‌گذاری‌شده‌ست و قابل ویرایش نیست</div>
+<div class="topbar">
+  <button class="icon-btn" id="menuBtn" aria-label="باز کردن منو"><i class="fa-solid fa-bars"></i></button>
+  <button class="icon-btn" id="backBtn" style="display:none" aria-label="بازگشت"><i class="fa-solid fa-arrow-right"></i></button>
+  <div class="top-title" id="topTitle"><span class="badge">★</span> نمره‌دهی</div>
+  <button class="theme-fab" id="themeBtn" title="تغییر تم" aria-label="تغییر تم روشن/تاریک">
+    <span class="tf-icons"><i class="fa-solid fa-moon"></i><i class="fa-solid fa-sun"></i></span>
+    <span class="tf-knob" id="themeKnob"><i class="fa-solid fa-sun"></i></span>
+  </button>
+  <div class="count" id="countBadge">۰</div>
+</div>
+
+<div class="screen active" id="screenHome">
+  <div class="container">
+    <div class="home-head">
+      <span class="home-head-label">لیست‌های من</span>
+      <button class="reorder-toggle" id="reorderListsBtn"><i class="fa-solid fa-arrows-up-down"></i> ترتیب لیست‌ها</button>
+    </div>
+    <div class="lists-grid" id="listsGrid"></div>
+  </div>
+</div>
+
+<div class="screen" id="screenList">
+  <div class="container">
+    <div class="list-switch" id="listSwitch">
+      <button class="ls-arrow" id="lsPrev" aria-label="لیست قبلی"><i class="fa-solid fa-chevron-right"></i></button>
+      <div class="ls-info" id="lsInfo"><span id="lsName"></span><span class="ls-hint">بکشید یا بزنید برای تعویض لیست</span></div>
+      <button class="ls-arrow" id="lsNext" aria-label="لیست بعدی"><i class="fa-solid fa-chevron-left"></i></button>
+      <button class="share-list-btn" id="linkWatchlistBtn" title="وصل کردن کل صف‌تماشا به یک لیست" aria-label="وصل صف‌تماشا" style="display:none;background:linear-gradient(145deg,#0a84ff,#0066cc)">🔗</button>
+      <button class="share-list-btn" id="shareListBtn" title="اشتراک‌گذاری این لیست (فقط نمایش)" aria-label="اشتراک‌گذاری لیست">📤</button>
+    </div>
+    <div class="view-bar">
+      <div class="search"><input type="text" id="searchInput" placeholder="جستجو در عنوان، ژانر، تگ..."/></div>
+      <select class="sel" id="sortSelect">
+        <option value="date-desc">جدیدترین (سال)</option>
+        <option value="date-asc">قدیمی‌ترین (سال)</option>
+        <option value="rating-desc">بالاترین نمره</option>
+        <option value="rating-asc">پایین‌ترین نمره</option>
+        <option value="title-asc">الفبایی</option>
+        <option value="genre-asc">ژانر</option>
+        <option value="manual">ترتیب دستی</option>
+      </select>
+      <div class="view-btns">
+        <button data-size="lg">▦</button>
+        <button data-size="md" class="active">▤</button>
+        <button data-size="sm">▦</button>
+        <button data-size="list">☰</button>
+      </div>
+      <button class="icon-btn" id="selectModeBtn" title="انتخاب چندتایی" aria-label="فعال کردن حالت انتخاب چندتایی"><i class="fa-regular fa-square-check"></i></button>
+    </div>
+    <div class="list-stats" id="listStats"></div>
+    <div class="filter-chips" id="filterChips"></div>
+    <div class="az-bar" id="azBar"></div>
+    <div class="items-grid size-md" id="itemsGrid"></div>
+    <button class="load-more" id="loadMore" style="display:none">بارگذاری بیشتر</button>
+    <div class="page-indicator" id="pageInfo"></div>
+    <div class="empty" id="empty" style="display:none"><div class="icon">✦</div><p style="font-weight:600;margin-bottom:4px">هنوز چیزی اینجا نیست</p><p style="font-size:.84rem">روی + بزن و اولین موردت رو اضافه کن</p></div>
+  </div>
+</div>
+
+<button class="fab" id="fab" aria-label="افزودن مورد جدید"><i class="fa-solid fa-plus"></i></button>
+<div class="bulk-bar" id="bulkBar">
+  <span id="bulkCount" style="font-size:.85rem;font-weight:600"></span>
+  <button class="btn-danger" id="bulkDelete" style="background:var(--danger);color:#fff;border:none">حذف</button>
+  <button class="btn-ghost" id="bulkCancel">لغو</button>
+</div>
+
+<div class="ctx-menu" id="ctxMenu">
+  <button id="ctxEdit">✏️ ویرایش لیست</button>
+  <button id="ctxDelete" class="danger">🗑 حذف لیست</button>
+</div>
+
+<div class="overlay" id="overlay"></div>
+<div class="side-menu" id="sideMenu">
+  <div class="head">نمره‌دهی</div>
+  <!-- بخش کاربر / ابر — بالای منو -->
+  <div class="user-card" id="userCard">
+    <div class="user-avatar" id="userAvatar">
+      <img id="userAvatarImg" src="https://api.dicebear.com/7.x/avataaars/svg?seed=guest&backgroundColor=ffc107" alt="" style="display:none"/>
+      <span class="ua-icon" id="userAvatarIcon"><i class="fa-solid fa-user"></i></span>
+      <span class="ua-letter" id="userAvatarLetter" style="display:none"></span>
+    </div>
+    <div class="user-info">
+      <div class="ui-name" id="userName">مهمان</div>
+      <div class="ui-status" id="userStatus">وارد نشده‌ای</div>
+    </div>
+    <button class="user-login-btn" id="openAuthBtn">ورود</button>
+    <div class="user-actions" id="userActions">
+      <button class="ua-btn" id="cloudSaveBtn"><i class="fa-solid fa-cloud-arrow-up"></i> ذخیره در ابر</button>
+      <button class="ua-btn" id="cloudLoadBtn"><i class="fa-solid fa-cloud-arrow-down"></i> بارگذاری از ابر</button>
+      <button class="ua-btn danger" id="cloudLogoutBtn"><i class="fa-solid fa-right-from-bracket"></i> خروج از اکانت</button>
+    </div>
+  </div>
+  <div class="sep"></div>
+  <button class="item" data-action="home"><span>🏘️</span> همه لیست‌ها</button>
+  <button class="item" data-action="globalSearch"><span>🔎</span> جستجوی سراسری</button>
+  <button class="item" data-action="suggest"><span>✨</span> پیشنهادها</button>
+  <div class="sep"></div>
+  <button class="item" data-action="ratingColors"><span>🎨</span> رنگ‌بندی نمره‌ها</button>
+
+  <div class="sep"></div>
+  <button class="item" data-action="export"><span>💾</span> ذخیره نسخه پشتیبان</button>
+  <button class="item" data-action="import"><span>📂</span> بازیابی / ادغام<input type="file" id="importFile" accept=".json" style="display:none"/></button>
+  <div class="sep"></div>
+  <button class="item" data-action="dups"><span>🧭</span> پیدا کردن تکراری‌ها</button>
+  <button class="item" data-action="apikey"><span>🗝️</span> کلید جستجوی آنلاین</button>
+  <button class="item" data-action="help"><span>❓</span> راهنما</button>
+  <div class="sep"></div>
+  <button class="item" data-action="fresh" style="color:var(--danger)"><span>♻️</span> شروع نمره‌دهی جدید</button>
+</div>
+
+<!-- Add choice: single item vs. bulk text -->
+<div class="modal-bg" id="addChoiceModal">
+  <div class="modal">
+    <div class="modal-head"><h2>افزودن</h2><button class="close" id="closeAddChoice" aria-label="بستن"><i class="fa-solid fa-xmark"></i></button></div>
+    <button class="btn btn-main" id="addChoiceSingle" style="width:100%;margin-bottom:10px"><i class="fa-solid fa-plus"></i> یک مورد</button>
+    <button class="btn btn-ghost" id="addChoiceText" style="width:100%"><i class="fa-solid fa-file-lines"></i> چند مورد با هم (از متن)</button>
+    <p class="hint" style="margin-top:10px">برای افزودن گروهی: هر خط یک مورد، به‌صورت «عنوان, سال, نمره»</p>
+  </div>
+</div>
+
+<!-- Form -->
+<div class="modal-bg" id="formModal">
+  <div class="modal">
+    <div class="modal-head"><h2 id="formTitle">افزودن</h2><button class="close" id="closeForm" aria-label="بستن"><i class="fa-solid fa-xmark"></i></button></div>
+    <form id="itemForm">
+      <div class="fg"><label>لیست</label><select id="itemList"></select></div>
+      <div class="fg">
+        <label>عنوان *</label>
+        <div class="title-row">
+          <input type="text" id="title" required placeholder="اسم فیلم، سریال یا بازی"/>
+          <button type="button" class="search-btn" id="searchBtn">جستجو</button>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:8px;font-size:.8rem" id="typeRow">
+          <label style="display:flex;align-items:center;gap:4px;cursor:pointer"><input type="radio" name="stype" value="movie" checked/> فیلم</label>
+          <label style="display:flex;align-items:center;gap:4px;cursor:pointer"><input type="radio" name="stype" value="series"/> سریال</label>
+          <label style="display:flex;align-items:center;gap:4px;cursor:pointer"><input type="radio" name="stype" value="game"/> بازی</label>
+        </div>
+        <div class="lookup-box" id="lookupBox"></div>
+      </div>
+      <div class="fg"><label>سال</label><input type="number" id="year" min="1900" max="2100"/></div>
+      <div class="fg"><label>ژانر</label><input type="text" id="genre" placeholder="درام، اکشن..."/></div>
+      <div class="fg"><label>تگ شخصی</label><input type="text" id="tags" placeholder="کلاسیک، دوبله (با ویرگول)"/></div>
+      <div class="fg"><label>نمره (۰ تا ۱۰)</label><input type="number" id="rating" min="0" max="10" step="0.1" placeholder="۹.۸"/></div>
+      <div class="fg"><label>نقطه قوت</label><textarea id="notePros" placeholder="چی خوب بود؟" style="min-height:48px"></textarea></div>
+      <div class="fg"><label>نقطه ضعف</label><textarea id="noteCons" placeholder="چی ضعیف بود؟" style="min-height:48px"></textarea></div>
+      <div class="fg"><label>دوباره می‌بینم؟</label>
+        <select id="noteRewatch"><option value="">—</option><option value="yes">بله</option><option value="maybe">شاید</option><option value="no">نه</option></select>
+      </div>
+      <div class="fg"><label>یادداشت آزاد</label><textarea id="notes" placeholder="..."></textarea></div>
+      <div class="fg"><label>لینک عکس</label><input type="url" id="imageUrl" placeholder="https://..."/></div>
+      <div class="fg"><label>یا از گالری</label>
+        <label class="file-btn">📷 انتخاب عکس<input type="file" id="imageFile" accept="image/*"/></label>
+        <img class="preview" id="preview" alt=""/>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-danger" id="deleteBtn" style="display:none">حذف</button>
+        <button type="submit" class="btn btn-main">ذخیره</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Detail -->
+<div class="modal-bg" id="detailModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>جزئیات</h2>
+      <div style="display:flex;gap:6px;align-items:center">
+        <button class="icon-btn" id="favToggleBtn" style="width:34px;height:34px;font-size:1rem" aria-label="موردعلاقه">🤍</button>
+        <button class="icon-btn" id="imgExportBtn" style="width:34px;height:34px;font-size:1rem" aria-label="خروجی عکس" title="خروجی عکس"><i class="fa-solid fa-image"></i></button>
+        <button class="close" id="closeDetail" aria-label="بستن"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+    </div>
+    <div id="detailBody"></div>
+    <div class="actions">
+      <button class="pin-btn" id="pinBtn"><i class="fa-solid fa-thumbtack"></i> پین</button>
+      <button class="btn btn-ghost" id="episodesBtn" style="display:none"><i class="fa-solid fa-tv"></i> قسمت‌ها</button>
+      <button class="btn btn-main" id="seenBtn" style="display:none" title="دیدم — نمره بده و برو به لیست مقصد"><i class="fa-solid fa-eye"></i> دیدم</button>
+      <button class="btn btn-main" id="editBtn">ویرایش</button>
+    </div>
+  </div>
+</div>
+
+<!-- Image export orientation choice -->
+<div class="modal-bg" id="imgExportModal">
+  <div class="modal">
+    <div class="modal-head"><h2>خروجی عکس</h2><button class="close" id="closeImgExport" aria-label="بستن"><i class="fa-solid fa-xmark"></i></button></div>
+    <p class="hint" style="margin-bottom:12px">یه کارت خوشگل با تمام اطلاعات این مورد می‌سازه و به‌صورت عکس دانلود می‌کنه.</p>
+    <button class="btn btn-main" id="imgExportVertical" style="width:100%;margin-bottom:10px"><i class="fa-solid fa-mobile-screen-button"></i> عمودی</button>
+    <button class="btn btn-ghost" id="imgExportHorizontal" style="width:100%"><i class="fa-solid fa-desktop"></i> افقی</button>
+  </div>
+</div>
+
+<!-- Episodes panel (separate, not cluttering main) -->
+<div class="modal-bg" id="episodesModal">
+  <div class="modal">
+    <div class="modal-head"><h2 id="epTitle">قسمت‌ها</h2><button class="close" id="closeEpisodes" aria-label="بستن"><i class="fa-solid fa-xmark"></i></button></div>
+    <div id="episodesBody"></div>
+    <button class="btn btn-main" id="saveEpisodes" style="width:100%;margin-top:12px">ذخیره نمرات قسمت‌ها</button>
+  </div>
+</div>
+
+<!-- دیدم / وصل کردن آیتم صف‌تماشا -->
+<div class="modal-bg" id="moveToListModal">
+  <div class="modal">
+    <div class="modal-head"><h2 id="moveModalTitle">دیدم</h2><button class="close" id="closeMoveToList" aria-label="بستن"><i class="fa-solid fa-xmark"></i></button></div>
+    <p class="hint" id="moveModalHint" style="margin-bottom:12px">نمره بده و به لیست مقصد منتقل شو.</p>
+    <div class="fg" id="moveListFg"><label>لیست مقصد</label><select id="moveTargetList"></select></div>
+    <div class="fg" id="moveRatingFg"><label>نمره (۰ تا ۱۰) *</label><input type="number" id="moveRating" min="0" max="10" step="0.1" placeholder="مثلاً ۸.۵"/></div>
+    <button class="btn btn-main" id="doMoveToList" style="width:100%;margin-top:8px"><i class="fa-solid fa-eye"></i> تأیید</button>
+  </div>
+</div>
+
+<!-- List modal -->
+<div class="modal-bg" id="listModal">
+  <div class="modal">
+    <div class="modal-head"><h2 id="listModalTitle">لیست جدید</h2><button class="close" id="closeListModal" aria-label="بستن"><i class="fa-solid fa-xmark"></i></button></div>
+    <input type="hidden" id="listEditId"/>
+    <div class="fg"><label>نام</label><input type="text" id="listName" placeholder="مثلاً: فیلم‌های مورد علاقه"/></div>
+    <div class="fg"><label>رنگ</label><div class="colors" id="listColors"></div><input type="hidden" id="listColor" value="#f5c518"/></div>
+    <div class="row-tog"><span style="font-size:.88rem;font-weight:500">جستجوی آنلاین</span><div class="tog on" id="listOnline"></div></div>
+    <div class="row-tog"><span style="font-size:.88rem;font-weight:500">لیست سریال (نمره به قسمت‌ها)</span><div class="tog" id="listSeries"></div></div>
+    <p class="hint">اگر سریال باشه، می‌تونی فصل و قسمت‌ها رو از OMDb بگیری و جدا نمره بدی.</p>
+    <div class="row-tog"><span style="font-size:.88rem;font-weight:500">صف تماشا (بدون نمره)</span><div class="tog" id="listWatchlist"></div></div>
+    <p class="hint" id="watchlistHint">اگه روشن باشه، این لیست فقط برای چیزاییه که هنوز ندیدی و نمی‌تونی بهشون نمره بدی.</p>
+    <div class="actions" style="margin-top:16px">
+      <button class="btn btn-danger" id="listDelBtn" style="display:none">حذف</button>
+      <button class="btn btn-main" id="listSaveBtn">ذخیره</button>
+    </div>
+  </div>
+</div>
+
+<!-- Import choice -->
+<div class="modal-bg" id="importModal">
+  <div class="modal">
+    <div class="modal-head"><h2>بازیابی</h2><button class="close" id="closeImport" aria-label="بستن"><i class="fa-solid fa-xmark"></i></button></div>
+    <button class="btn btn-main" id="importReplace" style="width:100%;margin-bottom:10px">جایگزینی کامل</button>
+    <button class="btn btn-ghost" id="importMerge" style="width:100%">ادغام (بدون تکرار)</button>
+    <p class="hint" style="margin-top:10px">ادغام: آیتم‌های جدید اضافه می‌شن. عنوان+سال تکراری رد می‌شه.</p>
+  </div>
+</div>
+
+<!-- Text import -->
+<div class="modal-bg" id="textImportModal">
+  <div class="modal">
+    <div class="modal-head"><h2>ورود از متن</h2><button class="close" id="closeTextImport" aria-label="بستن"><i class="fa-solid fa-xmark"></i></button></div>
+    <p class="hint" style="margin-bottom:10px">هر خط: عنوان, سال, نمره<br/>مثال: Inception, 2010, 9.5</p>
+    <div class="fg"><textarea id="textImportArea" style="min-height:160px" placeholder="Inception, 2010, 9.5&#10;The Matrix, 1999, 9"></textarea></div>
+    <button class="btn btn-main" id="doTextImport" style="width:100%">افزودن به لیست فعلی</button>
+  </div>
+</div>
+
+<!-- Global search -->
+<div class="modal-bg" id="globalSearchModal">
+  <div class="modal">
+    <div class="modal-head"><h2>جستجوی سراسری</h2><button class="close" id="closeGlobalSearch" aria-label="بستن"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="fg"><input type="text" id="globalSearchInput" placeholder="جستجو در همه لیست‌ها..."/></div>
+    <div id="globalSearchResults"></div>
+  </div>
+</div>
+
+<!-- پیشنهادها -->
+<div class="modal-bg" id="suggestModal">
+  <div class="modal" style="max-height:92vh">
+    <div class="modal-head"><h2>✨ پیشنهادها</h2><button class="close" id="closeSuggest" aria-label="بستن"><i class="fa-solid fa-xmark"></i></button></div>
+    <div style="display:flex;gap:6px;margin-bottom:12px">
+      <button type="button" class="chip active" id="suggestTabGeneral" data-tab="general">عمومی</button>
+      <button type="button" class="chip" id="suggestTab2026" data-tab="2026">برترین ۲۰۲۶</button>
+    </div>
+    <p class="hint" id="suggestHint" style="margin-bottom:10px">نمره IMDb و پوستر. با «تغییر» کل پیشنهادها عوض می‌شه.</p>
+    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap" id="suggestFilters">
+      <select id="suggestScope" class="sel" style="flex:1;min-width:120px">
+        <option value="all">همه</option>
+        <option value="movie">فیلم</option>
+        <option value="series">سریال</option>
+        <option value="anime">انیمه</option>
+        <option value="animation">انیمیشن</option>
+      </select>
+      <button type="button" class="btn btn-ghost" id="suggestRefresh" style="flex-shrink:0"><i class="fa-solid fa-shuffle"></i> تغییر</button>
+    </div>
+    <div id="suggestBody"></div>
+  </div>
+</div>
+
+<!-- انتخاب لیست مقصد برای افزودن از پیشنهاد -->
+<div class="modal-bg" id="suggestAddModal">
+  <div class="modal">
+    <div class="modal-head"><h2>افزودن به کجا؟</h2><button class="close" id="closeSuggestAdd" aria-label="بستن"><i class="fa-solid fa-xmark"></i></button></div>
+    <p class="hint" id="suggestAddTitle" style="margin-bottom:12px"></p>
+    <div class="fg"><label>لیست / صف‌تماشا</label><select id="suggestTargetList"></select></div>
+    <button class="btn btn-main" id="doSuggestAdd" style="width:100%;margin-top:8px">افزودن</button>
+  </div>
+</div>
+
+<!-- Keys -->
+<div class="modal-bg" id="keyModal">
+  <div class="modal">
+    <div class="modal-head"><h2>کلید آنلاین</h2><button class="close" id="closeKey" aria-label="بستن"><i class="fa-solid fa-xmark"></i></button></div>
+    <p class="hint" style="margin-bottom:12px">اختیاری — برای پر کردن خودکار فیلم/سریال و قسمت‌ها</p>
+    <div class="fg"><label>OMDb (فیلم/سریال)</label><input type="text" id="omdbKey"/><p class="hint"><a href="https://www.omdbapi.com/apikey.aspx" target="_blank">omdbapi.com</a></p></div>
+    <div class="fg"><label>RAWG (بازی)</label><input type="text" id="rawgKey"/><p class="hint"><a href="https://rawg.io/apidocs" target="_blank">rawg.io/apidocs</a> — رایگان؛ با این کلید سال ساخت و ژانر بازی هم خودکار پر می‌شه</p></div>
+    <p class="hint" style="margin-bottom:12px">بدون کلید RAWG هم جستجوی بازی از CheapShark انجام می‌شه، ولی سال/ژانر نداره</p>
+    <button class="btn btn-main" id="saveKeys" style="width:100%">ذخیره</button>
+  </div>
+</div>
+
+<!-- Rating color bands -->
+<div class="modal-bg" id="ratingColorsModal">
+  <div class="modal">
+    <div class="modal-head"><h2>رنگ‌بندی نمره‌ها</h2><button class="close" id="closeRatingColors" aria-label="بستن"><i class="fa-solid fa-xmark"></i></button></div>
+    <p class="hint" style="margin-bottom:10px">برای هر بازه، حداقل نمره و رنگش رو مشخص کن. مثلاً «از ۸ به بالا، سبز».</p>
+    <div id="ratingBandsList"></div>
+    <button type="button" class="btn btn-ghost" id="addRatingBand" style="width:100%;margin-top:6px"><i class="fa-solid fa-plus"></i> افزودن بازه</button>
+    <div class="actions" style="margin-top:14px">
+      <button type="button" class="btn btn-ghost" id="resetRatingBands">پیش‌فرض</button>
+      <button type="button" class="btn btn-main" id="saveRatingBands">ذخیره</button>
+    </div>
+  </div>
+</div>
+
+<!-- Auth: ورود / ساخت اکانت (فقط شناسه + رمز) -->
+<div class="modal-bg auth-modal" id="authModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 style="opacity:0;pointer-events:none;font-size:0">ورود</h2>
+      <button class="close" id="closeAuth" aria-label="بستن"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="auth-hero">
+      <div class="auth-hero-icon">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=rating&backgroundColor=ffc107" alt="آواتار" width="72" height="72"/>
+      </div>
+      <h2 id="authHeroTitle">ورود به ابر</h2>
+      <p id="authHeroSub">با شناسه و رمز، داده‌هات رو بین دستگاه‌ها همگام کن</p>
+    </div>
+    <div class="auth-tabs">
+      <button type="button" class="auth-tab active" data-mode="login" id="authTabLogin">ورود</button>
+      <button type="button" class="auth-tab" data-mode="signup" id="authTabSignup">ساخت اکانت</button>
+    </div>
+    <div class="auth-error" id="authError"></div>
+    <form id="authForm" autocomplete="on">
+      <div class="auth-field">
+        <label for="authEmail">ایمیل (جیمیل و ...)</label>
+        <i class="fa-solid fa-envelope af-icon"></i>
+        <input type="email" id="authEmail" name="email" required placeholder="مثلاً name@gmail.com" autocomplete="email" dir="ltr" inputmode="email"/>
+      </div>
+      <div class="auth-field" id="authUsernameWrap" style="display:none">
+        <label for="authUsername">نام نمایشی (اختیاری)</label>
+        <i class="fa-solid fa-user af-icon"></i>
+        <input type="text" id="authUsername" name="username" maxlength="32" placeholder="مثلاً arsames17" autocomplete="nickname" dir="ltr"/>
+      </div>
+      <div class="auth-field with-toggle">
+        <label for="authPassword">رمز عبور</label>
+        <i class="fa-solid fa-lock af-icon"></i>
+        <input type="password" id="authPassword" name="password" required minlength="6" placeholder="حداقل ۶ کاراکتر" autocomplete="current-password" dir="ltr"/>
+        <button type="button" class="auth-toggle-pw" id="authTogglePw" aria-label="نمایش رمز"><i class="fa-solid fa-eye"></i></button>
+      </div>
+
+      <button type="submit" class="auth-submit" id="authSubmit">ورود</button>
+    </form>
+    <p class="auth-hint" id="authHint">با <strong>ایمیل واقعی</strong> (مثل جیمیل) و رمز وارد شو یا اکانت بساز.</p>
+  </div>
+</div>
+
+<!-- Help -->
+<div class="modal-bg" id="helpModal">
+
+  <div class="modal">
+    <div class="modal-head"><h2>راهنما</h2><button class="close" id="closeHelp" aria-label="بستن"><i class="fa-solid fa-xmark"></i></button></div>
+    <div style="font-size:.86rem;line-height:1.75">
+      <p style="margin-bottom:8px"><strong style="color:var(--accent)">لیست:</strong> نگه داشتن روی کارت = ویرایش/حذف · دکمه «ترتیب لیست‌ها» برای درگ‌اند‌دراپ</p>
+      <p style="margin-bottom:8px"><strong style="color:var(--accent)">سریال:</strong> موقع ساخت لیست، «لیست سریال» رو روشن کن. بعد آیتم سریال اضافه کن و از جزئیات «قسمت‌ها» رو باز کن.</p>
+      <p style="margin-bottom:8px"><strong style="color:var(--accent)">انتخاب چندتایی:</strong> دکمه ☑ بعد تیک بزن و حذف کن</p>
+      <p style="margin-bottom:8px"><strong style="color:var(--accent)">ترتیب دستی:</strong> مرتب‌سازی → ترتیب دستی. روی کامپیوتر از نوار پایین کارت بکش، روی موبایل از دکمه‌های ▲▼ استفاده کن</p>
+      <p style="margin-bottom:8px"><strong style="color:var(--accent)">صف تماشا:</strong> نمره IMDb نشون داده می‌شه. با دکمه 🔗 کنار نام لیست، کل صف رو یک‌بار به لیست عادی وصل کن. بعد روی هر کارت «دیدم» بزن و فقط نمره بده. اگه وصل نکرده باشی، موقع دیدم هم لیست هم نمره می‌پرسه.</p>
+      <p style="margin-bottom:8px"><strong style="color:var(--accent)">اشتراک لیست:</strong> دکمه 📤 کنار نام لیست → فایل فقط‌نمایش می‌سازه که می‌تونی بفرستی</p>
+      <p style="margin-bottom:8px"><strong style="color:var(--accent)">پشتیبان:</strong> از منو ذخیره کن و فایل JSON رو نگه دار</p>
+      <p style="margin-bottom:4px"><strong style="color:var(--accent)">میان‌برهای کیبورد (کامپیوتر):</strong></p>
+      <p style="margin-bottom:8px;color:var(--muted)">/ = جستجو · N = آیتم جدید · S = اشتراک لیست · F = موردعلاقه · P = پین · ← → = جابه‌جایی لیست · Esc = بستن</p>
+    </div>
+  </div>
+</div>
+
+<div class="poster-full" id="posterFull"><img id="posterFullImg" alt=""/></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ============================================================
+   نمره‌دهی — اپلیکیشن شخصی ثبت و امتیازدهی فیلم/سریال/بازی
+   ذخیره‌سازی کامل در localStorage، بدون نیاز به سرور.
+   ============================================================ */
+
+/* ---------- ثابت‌ها و کلیدهای ذخیره‌سازی ---------- */
+const SK = {
+  items:'pimdb_i_v6', lists:'pimdb_l_v6', active:'pimdb_a_v6', view:'pimdb_v_v6',
+  theme:'pimdb_t_v6', omdb:'pimdb_o_v6', rawg:'pimdb_r_v6', screen:'pimdb_s_v6',
+  order:'pimdb_ord_v6', sort:'pimdb_sort_v6', pageSize: 24, listPrefs:'pimdb_lp_v6',
+  ratingBands:'pimdb_rb_v1'
+};
+const DEFAULT_RATING_BANDS=[
+  {min:10,color:'#22d3ee'},{min:9,color:'#ffd60a'},{min:8,color:'#ff9f0a'},
+  {min:7,color:'#32d74b'},{min:6,color:'#2dd4bf'},{min:5,color:'#0a84ff'},
+  {min:4,color:'#a78bfa'},{min:0,color:'#ff453a'}
+];
+const COLORS = ['#f5c518','#e50914','#46d369','#1db954','#00b4d8','#7b2cbf','#ff6b35','#ff9f1c','#e63946','#2a9d8f','#e9c46a','#457b9d'];
+const AZ = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+/* ---------- Supabase (همگام‌سازی ابری) — فقط شناسه + رمز ---------- */
+const SUPABASE_URL = 'https://fzpdgmmvbytojwhohudt.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_3Ke9UX9WRIuePSWBbDMA-A_4l0TK0Ei';
+const { createClient } = supabase;
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const AUTH_EMAIL_DOMAIN = '@ratingapp.local'; // ایمیل ساختگی از روی شناسه
+let currentCloudUser = null;
+let authMode = 'login'; // login | signup
+
+function usernameToEmail(u){
+  return (u||'').trim().toLowerCase().replace(/\s+/g,'_') + AUTH_EMAIL_DOMAIN;
+}
+function emailToUsername(email){
+  if(!email) return '';
+  return email.replace(AUTH_EMAIL_DOMAIN,'').replace(/@.*$/,'');
+}
+function displayNameFromUser(userOrCloud){
+  if(!userOrCloud) return 'کاربر';
+  const metaUser = userOrCloud.username || (userOrCloud.user_metadata && userOrCloud.user_metadata.username);
+  if(metaUser) return metaUser;
+  const em = userOrCloud.email || '';
+  if(em.endsWith(AUTH_EMAIL_DOMAIN)) return emailToUsername(em);
+  if(em.includes('@')) return em.split('@')[0];
+  return em || 'کاربر';
+}
+
+function updateUserCard(){
+  const card = $('userCard');
+  const nameEl = $('userName');
+  const statusEl = $('userStatus');
+  const avImg = $('userAvatarImg');
+  const avIcon = $('userAvatarIcon');
+  const avLetter = $('userAvatarLetter');
+  if(!card) return;
+  if(currentCloudUser){
+    const uname = displayNameFromUser(currentCloudUser);
+    card.classList.add('logged-in');
+    nameEl.textContent = uname;
+    statusEl.textContent = 'متصل به ابر ✓';
+    avIcon.style.display = 'none';
+    avLetter.style.display = 'none';
+    avImg.style.display = 'block';
+    avImg.src = 'https://api.dicebear.com/7.x/avataaars/svg?seed='+encodeURIComponent(uname)+'&backgroundColor=ffc107';
+  } else {
+    card.classList.remove('logged-in');
+    nameEl.textContent = 'مهمان';
+    statusEl.textContent = 'وارد نشده‌ای';
+    avIcon.style.display = 'flex';
+    avLetter.style.display = 'none';
+    avImg.style.display = 'none';
+  }
+
+}
+
+async function refreshCloudSession(){
+  try{
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if(user){
+      const uname = (user.user_metadata && user.user_metadata.username) || null;
+      currentCloudUser = { id: user.id, email: user.email, username: uname };
+    } else {
+      currentCloudUser = null;
+    }
+  }catch{ currentCloudUser = null; }
+  updateUserCard();
+}
+
+function showAuthError(msg){
+  const el = $('authError');
+  if(!el) return;
+  if(msg){ el.textContent = msg; el.classList.add('show'); }
+  else { el.textContent = ''; el.classList.remove('show'); }
+}
+
+function setAuthMode(mode){
+  authMode = mode;
+  const isLogin = mode === 'login';
+  $('authTabLogin')?.classList.toggle('active', isLogin);
+  $('authTabSignup')?.classList.toggle('active', !isLogin);
+  if($('authHeroTitle')) $('authHeroTitle').textContent = isLogin ? 'ورود به ابر' : 'ساخت اکانت جدید';
+  if($('authHeroSub')) $('authHeroSub').textContent = isLogin
+    ? 'با ایمیل و رمز، داده‌هات رو بین دستگاه‌ها همگام کن'
+    : 'ایمیل واقعی (جیمیل و ...) و رمز انتخاب کن';
+  if($('authSubmit')) $('authSubmit').textContent = isLogin ? 'ورود' : 'ساخت اکانت';
+  if($('authPassword')) $('authPassword').autocomplete = isLogin ? 'current-password' : 'new-password';
+  const uw = $('authUsernameWrap');
+  if(uw) uw.style.display = isLogin ? 'none' : 'block';
+  if($('authHint')) $('authHint').innerHTML = isLogin
+    ? 'با <strong>ایمیل</strong> و <strong>رمز</strong> وارد شو.'
+    : 'ایمیل واقعی لازم است — بعد از ساخت اکانت می‌تونی وارد شی.';
+  showAuthError('');
+}
+
+function openAuthModal(mode){
+  if(VIEW_ONLY) return;
+  setAuthMode(mode || 'login');
+  if($('authEmail')) $('authEmail').value = '';
+  if($('authUsername')) $('authUsername').value = '';
+  if($('authPassword')) $('authPassword').value = '';
+  showAuthError('');
+  $('authModal')?.classList.add('show');
+  setTimeout(()=>$('authEmail')?.focus(), 80);
+}
+
+async function cloudSignUp(email, password, username) {
+  const meta = {};
+  if (username && username.trim()) meta.username = username.trim();
+  const { data, error } = await supabaseClient.auth.signUp({
+    email: email.trim().toLowerCase(),
+    password,
+    options: { data: meta }
+  });
+  if (error) throw error;
+  return data;
+}
+
+async function cloudSignIn(email, password) {
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
+    email: email.trim().toLowerCase(),
+    password
+  });
+  if (error) throw error;
+  return data;
+}
+
+async function cloudSignOut() {
+  await supabaseClient.auth.signOut();
+  currentCloudUser = null;
+  updateUserCard();
+  toast('خارج شدی');
+}
+
+async function saveToCloud() {
+  const { data: { user } } = await supabaseClient.auth.getUser();
+  if (!user) return toast('اول وارد شو');
+  const payload = { lists, items, itemOrder, listPrefs, ratingBands };
+  const { error } = await supabaseClient
+    .from('user_data')
+    .upsert({ user_id: user.id, data: payload, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
+  if (error) toast('خطا در ذخیره: ' + error.message);
+  else toast('در ابر ذخیره شد ✓');
+}
+
+async function loadFromCloud() {
+  const { data: { user } } = await supabaseClient.auth.getUser();
+  if (!user) return toast('اول وارد شو');
+  const { data, error } = await supabaseClient
+    .from('user_data')
+    .select('data')
+    .eq('user_id', user.id)
+    .maybeSingle();
+  if (error) return toast('خطا: ' + error.message);
+  if (!data || !data.data) return toast('داده‌ای در ابر پیدا نشد');
+  lists = data.data.lists || lists;
+  items = data.data.items || items;
+  itemOrder = data.data.itemOrder || {};
+  listPrefs = data.data.listPrefs || {};
+  ratingBands = data.data.ratingBands || ratingBands;
+  save(SK.lists, lists);
+  save(SK.items, items);
+  save(SK.order, itemOrder);
+  save(SK.listPrefs, listPrefs);
+  save(SK.ratingBands, ratingBands);
+  toast('از ابر بارگذاری شد ✓');
+  showScreen('Home');
+}
+
+
+/* ---------- حالت «فقط نمایش» (نسخهٔ اشتراک‌گذاری‌شده) ----------
+   وقتی این فایل با «اشتراک‌گذاری» خروجی گرفته می‌شه، دو خط زیر با مقادیر واقعی
+   جایگزین می‌شن تا گیرنده فقط بتونه ببینه، نه ویرایش کنه. کاربر عادی این‌ها رو
+   دست نمی‌زنه. */
+/*VIEWONLY_FLAG_START*/let VIEW_ONLY=false;/*VIEWONLY_FLAG_END*/
+/*EMBEDDED_DATA_START*/let EMBEDDED_DATA=null;/*EMBEDDED_DATA_END*/
+
+/* ---------- کمکی: خواندن/نوشتن در localStorage ---------- */
+function load(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch{return d}}
+function save(k,v){if(VIEW_ONLY)return;localStorage.setItem(k,JSON.stringify(v))}
+
+/* ---------- وضعیت برنامه (state) ---------- */
+let items = (VIEW_ONLY&&EMBEDDED_DATA)?EMBEDDED_DATA.items:load(SK.items,[]);
+let lists = (VIEW_ONLY&&EMBEDDED_DATA)?EMBEDDED_DATA.lists:load(SK.lists,null);
+if(!lists||!lists.length){lists=[{id:'default',name:'عمومی',color:'#f5c518',online:true,series:false}];save(SK.lists,lists)}
+let activeListId = localStorage.getItem(SK.active)||lists[0].id;
+let viewSize = localStorage.getItem(SK.view)||'md';
+let sortMode = localStorage.getItem(SK.sort)||'date-desc';
+let theme = localStorage.getItem(SK.theme)||'dark';
+let omdbKey = localStorage.getItem(SK.omdb)||'';
+let rawgKey = localStorage.getItem(SK.rawg)||'';
+let itemOrder = (VIEW_ONLY&&EMBEDDED_DATA)?(EMBEDDED_DATA.itemOrder||{}):load(SK.order,{}); // listId -> [itemIds]
+// ترتیب و شکل نمایش هر لیست، جدا برای خودش ذخیره می‌شه
+let listPrefs = load(SK.listPrefs,{}); // listId -> {sort,view}
+function getListPref(listId){
+  const p=listPrefs[listId]||{};
+  return {sort:p.sort||sortMode||'date-desc', view:p.view||viewSize||'md'};
+}
+function setListPref(listId,patch){
+  listPrefs[listId]={...getListPref(listId),...patch};
+  save(SK.listPrefs,listPrefs);
+}
+function applyListPrefsUI(){
+  const p=getListPref(activeListId);
+  sortMode=p.sort;viewSize=p.view;
+  if($('sortSelect'))$('sortSelect').value=sortMode;
+  document.querySelectorAll('.view-btns button').forEach(b=>b.classList.toggle('active',b.dataset.size===viewSize));
+}
+let currentId=null, imgData=null, listOnlineOn=true, listSeriesOn=false, listWatchlistOn=false;
+let watchlistWarnDismissed = localStorage.getItem('pimdb_wl_warn')==='1';
+let ctxListId=null, longPressTimer=null, pendingImport=null;
+let ratingFilter='all', tagFilter='', selectMode=false, selected=new Set();
+let page=0, formDirty=false, letterFilter='';
+let currentEpisodes=null; // working copy when editing episodes
+
+items.forEach(i=>{if(!i.listId)i.listId='default';if(!i.tags)i.tags='';if(!i.episodes)i.episodes=[];if(i.favorite==null)i.favorite=false});
+// پاکسازی فقط نمره از آیتم‌های صف‌تماشا
+(function sanitizeWatchlistRatings(){
+  const wlIds=new Set(lists.filter(l=>l.watchlist).map(l=>l.id));
+  if(!wlIds.size)return;
+  let changed=false;
+  items.forEach(i=>{
+    if(wlIds.has(i.listId)&&i.rating!=null&&i.rating!==''){
+      i.rating=null;changed=true;
+    }
+  });
+  if(changed&&!VIEW_ONLY)save(SK.items,items);
+})();
+
+const $=id=>document.getElementById(id);
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
+function fa(n){if(n==null||n==='')return'';return String(n).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d])}
+function esc(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
+function getList(id){return lists.find(l=>l.id===id)||lists[0]}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function imgOf(it){return it.imageUrl||it.image||null}
+function parseTags(str){return(str||'').split(/[,،]/).map(s=>s.trim()).filter(Boolean)}
+let ratingBands=load(SK.ratingBands,null);
+if(!ratingBands||!ratingBands.length)ratingBands=DEFAULT_RATING_BANDS.map(b=>({...b}));
+function sortedBands(){return[...ratingBands].sort((a,b)=>b.min-a.min)}
+function ratingColor(r){
+  if(r==null||r==='')return'#555';
+  const n=parseFloat(r);
+  const bands=sortedBands();
+  for(const b of bands)if(n>=b.min)return b.color;
+  return bands.length?bands[bands.length-1].color:'#555';
+}
+function renderRatingBandsRows(){
+  const bands=sortedBands();
+  $('ratingBandsList').innerHTML=bands.map((b,i)=>`<div class="rband-row" data-i="${i}">
+    <input type="color" value="${b.color}" data-role="color"/>
+    <span class="rband-label">از نمرهٔ</span>
+    <input type="number" min="0" max="10" step="0.1" value="${b.min}" data-role="min"/>
+    <span class="rband-label" style="flex:1">به بالا</span>
+    <button type="button" class="rband-del" data-role="del" ${bands.length<=1?'disabled':''}><i class="fa-solid fa-trash"></i></button>
+  </div>`).join('');
+}
+function openRatingColorsModal(){renderRatingBandsRows();$('ratingColorsModal').classList.add('show')}
+$('closeRatingColors').onclick=()=>$('ratingColorsModal').classList.remove('show');
+$('addRatingBand').onclick=()=>{
+  ratingBands=sortedBands();
+  ratingBands.push({min:0,color:'#888888'});
+  renderRatingBandsRows();
+};
+$('resetRatingBands').onclick=()=>{ratingBands=DEFAULT_RATING_BANDS.map(b=>({...b}));renderRatingBandsRows();toast('بازه‌ها به پیش‌فرض برگشت')};
+$('ratingBandsList').addEventListener('click',e=>{
+  const del=e.target.closest('[data-role="del"]');if(!del)return;
+  const row=del.closest('.rband-row');const i=+row.dataset.i;
+  const bands=sortedBands();bands.splice(i,1);ratingBands=bands;renderRatingBandsRows();
+});
+$('saveRatingBands').onclick=()=>{
+  const rows=[...$('ratingBandsList').querySelectorAll('.rband-row')];
+  const bands=rows.map(row=>({
+    min:parseFloat(row.querySelector('[data-role="min"]').value)||0,
+    color:row.querySelector('[data-role="color"]').value
+  }));
+  ratingBands=bands;save(SK.ratingBands,ratingBands);
+  $('ratingColorsModal').classList.remove('show');
+  toast('رنگ‌بندی ذخیره شد');
+  if($('screenList').classList.contains('active'))renderItems();
+};
+function letterOf(title){
+  const t=(title||'').trim();
+  if(!t)return'#';
+  const c=t[0].toUpperCase();
+  return /[A-Z]/.test(c)?c:'#';
+}
+function debounce(fn,ms){let t;return(...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms)}}
+function phStyle(title){
+  // deterministic hue from title
+  let h=0;for(let i=0;i<(title||'').length;i++)h=(h*31+title.charCodeAt(i))%360;
+  return `background:linear-gradient(145deg,hsl(${h},40%,28%),hsl(${h},35%,16%))`;
+}
+
+document.documentElement.setAttribute('data-theme',theme);
+if(VIEW_ONLY)document.body.classList.add('view-only');
+$('themeKnob').innerHTML=theme==='light'?'<i class="fa-solid fa-moon"></i>':'<i class="fa-solid fa-sun"></i>';
+document.querySelector('meta[name="theme-color"]').content=theme==='light'?'#f2f2f4':'#0a0a0b';
+
+function showScreen(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  $('screen'+name).classList.add('active');
+  hideCtx();
+  localStorage.setItem(SK.screen,name);
+  if(name==='Home'){
+    $('backBtn').style.display='none';$('menuBtn').style.display='flex';
+    $('topTitle').innerHTML='<span class="badge">★</span> نمره‌دهی';
+    $('fab').classList.remove('show');
+    exitSelectMode();
+    renderHome();
+  } else {
+    $('backBtn').style.display='flex';$('menuBtn').style.display='none';
+    const list=getList(activeListId);
+    const extra=(list.watchlist?' ⏳':'')+(list.series?' 📺':'');
+    $('topTitle').textContent=list.name+extra;
+    $('lsName').textContent=list.name+extra;
+    $('fab').classList.add('show');
+    if($('linkWatchlistBtn'))$('linkWatchlistBtn').style.display=(list.watchlist&&!VIEW_ONLY)?'flex':'none';
+    page=0;letterFilter='';
+    applyListPrefsUI();
+    renderAz();renderFilterChips();renderItems();
+  }
+}
+
+$('backBtn').onclick=()=>showScreen('Home');
+$('menuBtn').onclick=()=>{$('overlay').classList.add('show');$('sideMenu').classList.add('show')};
+$('overlay').onclick=()=>{$('overlay').classList.remove('show');$('sideMenu').classList.remove('show')};
+$('themeBtn').onclick=()=>{
+  theme=theme==='dark'?'light':'dark';
+  localStorage.setItem(SK.theme,theme);
+  document.documentElement.setAttribute('data-theme',theme);
+  $('themeKnob').innerHTML=theme==='light'?'<i class="fa-solid fa-moon"></i>':'<i class="fa-solid fa-sun"></i>';
+  document.querySelector('meta[name="theme-color"]').content=theme==='light'?'#f2f2f4':'#0a0a0b';
+};
+
+document.querySelectorAll('.side-menu .item').forEach(btn=>{
+  btn.onclick=()=>{
+    const a=btn.dataset.action;
+    if(VIEW_ONLY&&a!=='home'&&a!=='globalSearch'&&a!=='help')return;
+    $('overlay').classList.remove('show');$('sideMenu').classList.remove('show');
+    if(a==='home')showScreen('Home');
+    if(a==='export')doExport();
+    if(a==='import')$('importFile').click();
+    if(a==='dups')findDups();
+    if(a==='globalSearch'){$('globalSearchInput').value='';$('globalSearchResults').innerHTML='';$('globalSearchModal').classList.add('show')}
+    if(a==='suggest')openSuggestModal();
+    if(a==='apikey'){$('omdbKey').value=omdbKey;$('rawgKey').value=rawgKey;$('keyModal').classList.add('show')}
+    if(a==='ratingColors')openRatingColorsModal();
+    if(a==='help')$('helpModal').classList.add('show');
+    if(a==='fresh'){
+
+      if(!confirm('همه لیست‌ها و آیتم‌ها پاک می‌شن و یک نمره‌دهی جدید شروع می‌شه.\nقبلش نسخه پشتیبان گرفتی؟'))return;
+      if(!confirm('مطمئنی؟ این کار برگشت نداره.'))return;
+      items=[];
+      lists=[{id:'default',name:'عمومی',color:'#ffc107',online:true,series:false}];
+      itemOrder={};activeListId='default';
+      save(SK.items,items);save(SK.lists,lists);save(SK.order,itemOrder);
+      localStorage.setItem(SK.active,'default');
+      showScreen('Home');toast('نمره‌دهی جدید آماده شد');
+    }
+  };
+});
+
+/* ---------- پیشنهادها: IMDb + پوستر + فیلتر + انتخاب لیست ---------- */
+const SUGGEST_POOL=[
+  {title:'The Shawshank Redemption',year:'1994',type:'movie',genre:'دراما',imdb:'tt0111161',imdbRating:'9.3'},
+  {title:'The Godfather',year:'1972',type:'movie',genre:'جنایی، دراما',imdb:'tt0068646',imdbRating:'9.2'},
+  {title:'The Dark Knight',year:'2008',type:'movie',genre:'اکشن، جنایی',imdb:'tt0468569',imdbRating:'9.0'},
+  {title:'Pulp Fiction',year:'1994',type:'movie',genre:'جنایی',imdb:'tt0110912',imdbRating:'8.9'},
+  {title:'Forrest Gump',year:'1994',type:'movie',genre:'دراما، کمدی',imdb:'tt0109830',imdbRating:'8.8'},
+  {title:'Inception',year:'2010',type:'movie',genre:'علمی‌تخیلی، اکشن',imdb:'tt1375666',imdbRating:'8.8'},
+  {title:'Fight Club',year:'1999',type:'movie',genre:'دراما',imdb:'tt0137523',imdbRating:'8.8'},
+  {title:'The Matrix',year:'1999',type:'movie',genre:'علمی‌تخیلی، اکشن',imdb:'tt0133093',imdbRating:'8.7'},
+  {title:'Goodfellas',year:'1990',type:'movie',genre:'جنایی',imdb:'tt0099685',imdbRating:'8.7'},
+  {title:'Interstellar',year:'2014',type:'movie',genre:'علمی‌تخیلی، دراما',imdb:'tt0816692',imdbRating:'8.7'},
+  {title:'Parasite',year:'2019',type:'movie',genre:'هیجان‌انگیز، دراما',imdb:'tt6751668',imdbRating:'8.5'},
+  {title:'Whiplash',year:'2014',type:'movie',genre:'دراما، موسیقی',imdb:'tt2582802',imdbRating:'8.5'},
+  {title:'Spirited Away',year:'2001',type:'movie',genre:'انیمیشن، فانتزی',tags:['animation','anime'],imdb:'tt0245429',imdbRating:'8.6'},
+  {title:'The Prestige',year:'2006',type:'movie',genre:'رمزآلود، دراما',imdb:'tt0482571',imdbRating:'8.5'},
+  {title:'Django Unchained',year:'2012',type:'movie',genre:'وسترن، دراما',imdb:'tt1853728',imdbRating:'8.5'},
+  {title:'Mad Max: Fury Road',year:'2015',type:'movie',genre:'اکشن',imdb:'tt1392190',imdbRating:'8.1'},
+  {title:'Blade Runner 2049',year:'2017',type:'movie',genre:'علمی‌تخیلی',imdb:'tt1856101',imdbRating:'8.0'},
+  {title:'Arrival',year:'2016',type:'movie',genre:'علمی‌تخیلی، دراما',imdb:'tt2543164',imdbRating:'7.9'},
+  {title:'Joker',year:'2019',type:'movie',genre:'جنایی، دراما',imdb:'tt7286456',imdbRating:'8.4'},
+  {title:'Dune',year:'2021',type:'movie',genre:'علمی‌تخیلی',imdb:'tt1160419',imdbRating:'8.0'},
+  {title:'Oppenheimer',year:'2023',type:'movie',genre:'زندگینامه، دراما',imdb:'tt15398776',imdbRating:'8.3'},
+  {title:'Your Name',year:'2016',type:'movie',genre:'انیمیشن، رمانتیک',tags:['animation','anime'],imdb:'tt5311514',imdbRating:'8.4'},
+  {title:'Princess Mononoke',year:'1997',type:'movie',genre:'انیمیشن، فانتزی',tags:['animation','anime'],imdb:'tt0119698',imdbRating:'8.3'},
+  {title:'Spider-Man: Into the Spider-Verse',year:'2018',type:'movie',genre:'انیمیشن، اکشن',tags:['animation'],imdb:'tt4633694',imdbRating:'8.4'},
+  {title:'Toy Story',year:'1995',type:'movie',genre:'انیمیشن، کمدی',tags:['animation'],imdb:'tt0114709',imdbRating:'8.3'},
+  {title:'Coco',year:'2017',type:'movie',genre:'انیمیشن، ماجراجویی',tags:['animation'],imdb:'tt2380307',imdbRating:'8.4'},
+  {title:'Breaking Bad',year:'2008',type:'series',genre:'جنایی، دراما',imdb:'tt0903747',imdbRating:'9.5'},
+  {title:'Game of Thrones',year:'2011',type:'series',genre:'فانتزی، دراما',imdb:'tt0944947',imdbRating:'9.2'},
+  {title:'The Wire',year:'2002',type:'series',genre:'جنایی، دراما',imdb:'tt0306414',imdbRating:'9.3'},
+  {title:'True Detective',year:'2014',type:'series',genre:'جنایی، رمزآلود',imdb:'tt2356777',imdbRating:'8.9'},
+  {title:'Dark',year:'2017',type:'series',genre:'علمی‌تخیلی، رمزآلود',imdb:'tt5753856',imdbRating:'8.7'},
+  {title:'Chernobyl',year:'2019',type:'series',genre:'تاریخی، دراما',imdb:'tt7366338',imdbRating:'9.3'},
+  {title:'The Last of Us',year:'2023',type:'series',genre:'اکشن، دراما',imdb:'tt3581920',imdbRating:'8.7'},
+  {title:'Succession',year:'2018',type:'series',genre:'دراما',imdb:'tt7660850',imdbRating:'8.8'},
+  {title:'Better Call Saul',year:'2015',type:'series',genre:'جنایی، دراما',imdb:'tt3032476',imdbRating:'9.0'},
+  {title:'Severance',year:'2022',type:'series',genre:'علمی‌تخیلی',imdb:'tt11280740',imdbRating:'8.7'},
+  {title:'Shogun',year:'2024',type:'series',genre:'تاریخی، دراما',imdb:'tt2788316',imdbRating:'8.6'},
+  {title:'Arcane',year:'2021',type:'series',genre:'انیمیشن، اکشن',tags:['animation'],imdb:'tt11126994',imdbRating:'9.0'},
+  {title:'Attack on Titan',year:'2013',type:'series',genre:'انیمه، اکشن',tags:['anime','animation'],imdb:'tt2560140',imdbRating:'9.1'},
+  {title:'Death Note',year:'2006',type:'series',genre:'انیمه، رمزآلود',tags:['anime','animation'],imdb:'tt0877057',imdbRating:'8.9'},
+  {title:'Fullmetal Alchemist: Brotherhood',year:'2009',type:'series',genre:'انیمه، ماجراجویی',tags:['anime','animation'],imdb:'tt1355642',imdbRating:'9.1'},
+  {title:'Demon Slayer',year:'2019',type:'series',genre:'انیمه، اکشن',tags:['anime','animation'],imdb:'tt9335498',imdbRating:'8.6'},
+  {title:'Jujutsu Kaisen',year:'2020',type:'series',genre:'انیمه، اکشن',tags:['anime','animation'],imdb:'tt12343534',imdbRating:'8.6'},
+  {title:'Hunter x Hunter',year:'2011',type:'series',genre:'انیمه، ماجراجویی',tags:['anime','animation'],imdb:'tt2098220',imdbRating:'9.0'},
+  {title:'Cowboy Bebop',year:'1998',type:'series',genre:'انیمه، علمی‌تخیلی',tags:['anime','animation'],imdb:'tt0213338',imdbRating:'8.9'}
+];
+// برترین‌های ۲۰۲۶ (استخر بزرگ‌تر تا با «تغییر» عوض بشه)
+const TOP_2026_POOL=[
+  {title:'Dune: Part Three',year:'2026',type:'movie',genre:'علمی‌تخیلی، ماجراجویی',imdbRating:'—'},
+  {title:'The Batman Part II',year:'2026',type:'movie',genre:'اکشن، جنایی',imdbRating:'—'},
+  {title:'Avengers: Doomsday',year:'2026',type:'movie',genre:'اکشن، علمی‌تخیلی',imdbRating:'—'},
+  {title:'Spider-Man: Brand New Day',year:'2026',type:'movie',genre:'اکشن، ماجراجویی',imdbRating:'—'},
+  {title:'The Odyssey',year:'2026',type:'movie',genre:'ماجراجویی، حماسی',imdbRating:'—'},
+  {title:'Project Hail Mary',year:'2026',type:'movie',genre:'علمی‌تخیلی، دراما',imdbRating:'—'},
+  {title:'Clayface',year:'2026',type:'movie',genre:'ترسناک، جنایی',imdbRating:'—'},
+  {title:'Supergirl: Woman of Tomorrow',year:'2026',type:'movie',genre:'اکشن، علمی‌تخیلی',imdbRating:'—'},
+  {title:'The Drama',year:'2026',type:'movie',genre:'دراما، رمانتیک',imdbRating:'—'},
+  {title:'Scream 7',year:'2026',type:'movie',genre:'ترسناک',imdbRating:'—'},
+  {title:'Michael',year:'2026',type:'movie',genre:'زندگینامه، موسیقی',imdbRating:'—'},
+  {title:'Toy Story 5',year:'2026',type:'movie',genre:'انیمیشن، کمدی',tags:['animation'],imdbRating:'—'},
+  {title:'Minions 3',year:'2026',type:'movie',genre:'انیمیشن، کمدی',tags:['animation'],imdbRating:'—'},
+  {title:'The Mandalorian & Grogu',year:'2026',type:'movie',genre:'علمی‌تخیلی، ماجراجویی',imdbRating:'—'},
+  {title:'Crime 101',year:'2026',type:'movie',genre:'جنایی، هیجان‌انگیز',imdbRating:'—'},
+  {title:'Flowers of War',year:'2026',type:'movie',genre:'دراما',imdbRating:'—'},
+  {title:'Stranger Things Season 5',year:'2025',type:'series',genre:'علمی‌تخیلی، ترسناک',imdbRating:'—'},
+  {title:'The Last of Us Season 3',year:'2026',type:'series',genre:'اکشن، دراما',imdbRating:'—'},
+  {title:'House of the Dragon Season 3',year:'2026',type:'series',genre:'فانتزی، دراما',imdbRating:'—'},
+  {title:'Severance Season 3',year:'2026',type:'series',genre:'علمی‌تخیلی',imdbRating:'—'},
+  {title:'The Bear Season 5',year:'2026',type:'series',genre:'کمدی، دراما',imdbRating:'—'},
+  {title:'Andor Season 2',year:'2025',type:'series',genre:'علمی‌تخیلی، دراما',imdbRating:'—'},
+  {title:'Shogun Season 2',year:'2026',type:'series',genre:'تاریخی، دراما',imdbRating:'—'},
+  {title:'Fallout Season 2',year:'2025',type:'series',genre:'علمی‌تخیلی، اکشن',imdbRating:'—'},
+  {title:'The Boys Season 5',year:'2026',type:'series',genre:'اکشن، کمدی سیاه',imdbRating:'—'},
+  {title:'Arcane Season 3',year:'2026',type:'series',genre:'انیمیشن، اکشن',tags:['animation'],imdbRating:'—'},
+  {title:'Demon Slayer: Infinity Castle',year:'2025',type:'movie',genre:'انیمه، اکشن',tags:['anime','animation'],imdbRating:'—'},
+  {title:'Chainsaw Man – The Movie',year:'2025',type:'movie',genre:'انیمه، اکشن',tags:['anime','animation'],imdbRating:'—'},
+  {title:'Jujutsu Kaisen Season 3',year:'2026',type:'series',genre:'انیمه، اکشن',tags:['anime','animation'],imdbRating:'—'},
+  {title:'One Piece Live Action S2',year:'2026',type:'series',genre:'ماجراجویی، فانتزی',imdbRating:'—'}
+];
+let suggestShownIds=[];
+let suggestTab='general'; // general | 2026
+let pendingSuggest=null;
+
+function suggestKey(s){return((s.title||'').toLowerCase().trim()+'|'+(s.year||'')).trim()}
+function existingKeys(){return new Set(items.map(i=>((i.title||'').toLowerCase().trim()+'|'+(i.year||'')).trim()))}
+
+function shuffleArr(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function pickSuggestions(forceNew){
+  const have=existingKeys();
+  let pool, count;
+  if(suggestTab==='2026'){
+    pool=TOP_2026_POOL.filter(s=>!have.has(suggestKey(s)));
+    count=10; // ده تای برتر سال
+  } else {
+    const scope=$('suggestScope')?$('suggestScope').value:'all';
+    pool=SUGGEST_POOL.filter(s=>{
+      if(have.has(suggestKey(s)))return false;
+      const tags=s.tags||[];
+      if(scope==='movie'&&s.type!=='movie')return false;
+      if(scope==='series'&&s.type!=='series')return false;
+      if(scope==='anime'&&!tags.includes('anime'))return false;
+      if(scope==='animation'&&!tags.includes('animation'))return false;
+      return true;
+    });
+    count=8;
+  }
+  if(forceNew&&suggestShownIds.length&&pool.length>count){
+    const prev=new Set(suggestShownIds);
+    const fresh=pool.filter(s=>!prev.has(suggestKey(s)));
+    if(fresh.length>=Math.min(4,count))pool=fresh;
+  }
+  pool=shuffleArr(pool);
+  // برای ۲۰۲۶: مرتب‌سازی تصادفی ولی همیشه ۱۰ تا (یا کمتر اگه همه اضافه شدن)
+  const pick=pool.slice(0,count);
+  suggestShownIds=pick.map(suggestKey);
+  return pick;
+}
+
+function suggestPosterUrl(s,size){
+  if(!s.imdb||!omdbKey)return null;
+  // thumb: لیست پیشنهاد | full: ذخیره با کیفیت بالا تو لیست اصلی
+  const h=size==='full'?1000:140;
+  return `https://img.omdbapi.com/?i=${s.imdb}&h=${h}&apikey=${encodeURIComponent(omdbKey)}`;
+}
+
+function renderSuggestList(forceNew){
+  const pick=pickSuggestions(!!forceNew);
+  if(!pick.length){
+    $('suggestBody').innerHTML='<p class="suggest-empty">همه پیشنهادهای این دسته رو قبلاً اضافه کردی 👏</p>';
+    return;
+  }
+  const typeLabel=s=>{
+    if((s.tags||[]).includes('anime'))return 'انیمه';
+    if((s.tags||[]).includes('animation'))return 'انیمیشن';
+    return s.type==='series'?'سریال':'فیلم';
+  };
+  $('suggestBody').innerHTML=`<div class="suggest-row">${pick.map((s,i)=>{
+    const poster=suggestPosterUrl(s,'thumb');
+    const letter=(s.title||'?')[0].toUpperCase();
+    const posterHtml=poster
+      ?`<img class="si-poster" src="${poster}" loading="lazy" onerror="this.outerHTML='<div class=\\'si-poster ph\\'>${esc(letter)}</div>'"/>`
+      :`<div class="si-poster ph">${esc(letter)}</div>`;
+    const rank=suggestTab==='2026'?`<span style="color:var(--accent);font-weight:800;margin-left:4px">#${fa(i+1)}</span>`:'';
+    return `<div class="suggest-item" data-idx="${i}">
+      ${posterHtml}
+      <div class="si-info">
+        <div class="si-title">${rank}${esc(s.title)}</div>
+        <div class="si-meta">
+          <span>${s.year||''} · ${typeLabel(s)}</span>
+          ${s.imdbRating&&s.imdbRating!=='—'?`<span class="si-imdb">IMDb ★ ${s.imdbRating}</span>`:''}
+        </div>
+      </div>
+      ${VIEW_ONLY?'':`<button type="button" class="si-add" data-i="${i}">افزودن</button>`}
+    </div>`;
+  }).join('')}</div>`;
+  $('suggestBody')._pick=pick;
+  $('suggestBody').querySelectorAll('.si-add').forEach(btn=>{
+    btn.onclick=()=>{
+      const s=$('suggestBody')._pick[+btn.dataset.i];
+      if(!s)return;
+      openSuggestAdd(s);
+    };
+  });
+}
+
+function openSuggestAdd(s){
+  pendingSuggest=s;
+  $('suggestAddTitle').textContent='«'+s.title+'» به کدوم لیست بره؟';
+  // اول صف‌تماشاها، بعد بقیه
+  const wl=lists.filter(l=>l.watchlist);
+  const other=lists.filter(l=>!l.watchlist);
+  const ordered=[...wl,...other];
+  if(!ordered.length)return toast('اول یه لیست بساز');
+  $('suggestTargetList').innerHTML=ordered.map(l=>{
+    const tag=l.watchlist?' (صف‌تماشا)':(l.series?' (سریال)':'');
+    const sel=l.id===activeListId?'selected':'';
+    return `<option value="${l.id}" ${sel}>${esc(l.name)}${tag}</option>`;
+  }).join('');
+  // اگه صف‌تماشا هست، پیش‌فرض اولی صف‌تماشا
+  if(wl.length&&!getList(activeListId).watchlist){
+    $('suggestTargetList').value=wl[0].id;
+  }
+  $('suggestAddModal').classList.add('show');
+}
+
+$('doSuggestAdd').onclick=async()=>{
+  if(!pendingSuggest)return;
+  const s=pendingSuggest;
+  const listId=$('suggestTargetList').value;
+  const target=getList(listId);
+  if(!target)return toast('لیست نامعتبر');
+  const key=suggestKey(s);
+  if(items.some(i=>suggestKey(i)===key&&i.listId===listId)){
+    toast('قبلاً تو این لیست هست');
+    return;
+  }
+  // پوستر با کیفیت بالا: اول از API کامل OMDb، وگرنه img با h=1000
+  let poster=suggestPosterUrl(s,'full');
+  let imdbRating=s.imdbRating&&s.imdbRating!=='—'?s.imdbRating:null;
+  if(s.imdb&&omdbKey){
+    try{
+      const res=await fetch(`https://www.omdbapi.com/?apikey=${encodeURIComponent(omdbKey)}&i=${s.imdb}`);
+      const d=await res.json();
+      if(d&&d.Response!=='False'){
+        if(d.Poster&&d.Poster!=='N/A')poster=d.Poster; // کیفیت اصلی
+        if(d.imdbRating&&d.imdbRating!=='N/A')imdbRating=d.imdbRating;
+      }
+    }catch(e){/* همان full url می‌مونه */}
+  }
+  items.unshift({
+    id:uid(),createdAt:Date.now(),pinned:false,favorite:false,episodes:[],
+    title:s.title,year:s.year||null,genre:s.genre||'',tags:(s.tags||[]).includes('anime')?'انیمه':'',
+    rating:null,notes:'',notePros:'',noteCons:'',noteRewatch:'',
+    listId,imageUrl:poster||null,image:null,updatedAt:Date.now(),
+    imdbID:s.imdb||null,mediaType:s.type||'movie',imdbRating:imdbRating
+  });
+  save(SK.items,items);
+  $('suggestAddModal').classList.remove('show');
+  pendingSuggest=null;
+  toast('«'+s.title+'» → '+target.name);
+  renderSuggestList(false);
+  if($('screenList').classList.contains('active')){
+    if(activeListId===listId)renderItems();
+  } else if($('screenHome').classList.contains('active'))renderHome();
+};
+$('closeSuggestAdd').onclick=()=>{$('suggestAddModal').classList.remove('show');pendingSuggest=null};
+
+function setSuggestTab(tab){
+  suggestTab=tab;
+  suggestShownIds=[];
+  $('suggestTabGeneral').classList.toggle('active',tab==='general');
+  $('suggestTab2026').classList.toggle('active',tab==='2026');
+  $('suggestFilters').style.display=tab==='general'?'flex':'flex';
+  $('suggestScope').style.display=tab==='general'?'':'none';
+  $('suggestHint').textContent=tab==='2026'
+    ?'ده اثر برتر / موردانتظار ۲۰۲۶. با «تغییر» ترکیب عوض می‌شه.'
+    :'نمره IMDb و پوستر. با «تغییر» کل پیشنهادها عوض می‌شه.';
+  renderSuggestList(true);
+}
+function openSuggestModal(){
+  suggestShownIds=[];
+  if($('suggestScope'))$('suggestScope').value='all';
+  setSuggestTab('general');
+  $('suggestModal').classList.add('show');
+}
+$('suggestTabGeneral').onclick=()=>setSuggestTab('general');
+$('suggestTab2026').onclick=()=>setSuggestTab('2026');
+$('suggestRefresh').onclick=()=>{
+  renderSuggestList(true);
+  toast(suggestTab==='2026'?'برترین‌های ۲۰۲۶ عوض شد':'پیشنهادها عوض شد');
+};
+$('suggestScope').onchange=()=>{
+  suggestShownIds=[];
+  renderSuggestList(true);
+};
+$('closeSuggest').onclick=()=>$('suggestModal').classList.remove('show');
+
+// Home
+function renderHome(){
+  $('countBadge').textContent=fa(items.length)+' آیتم';
+  $('listsGrid').innerHTML=lists.map(l=>{
+    const cnt=items.filter(i=>i.listId===l.id).length;
+    let tags='';
+    if(l.series)tags+='<div class="series-tag">سریال</div>';
+    if(l.watchlist)tags+='<div class="series-tag" style="background:#0a84ff;top:'+(l.series?'34px':'12px')+'">صف تماشا</div>';
+    return `<div class="list-card ${listReorderMode?'drag-mode':''}" data-id="${l.id}">
+      <div class="bar" style="background:${l.color}"></div>
+      <div class="icon-wm"><i class="fa-solid fa-${l.watchlist?'clock':(l.series?'tv':'film')}"></i></div>
+      ${tags}
+      <div class="name">${esc(l.name)}</div>
+      <div class="meta">${fa(cnt)} آیتم</div>
+    </div>`;
+  }).join('')+(listReorderMode?'':`<div class="list-card add-list" id="addListCard"><div style="font-size:1.4rem">+</div><div>لیست جدید</div></div>`);
+  if($('addListCard'))$('addListCard').onclick=()=>openListModal(null);
+}
+
+// ---------- ترتیب لیست‌ها با کشیدن (drag & drop) ----------
+let listReorderMode=false;
+$('reorderListsBtn').onclick=()=>{
+  if(VIEW_ONLY)return;
+  listReorderMode=!listReorderMode;
+  $('reorderListsBtn').classList.toggle('on',listReorderMode);
+  $('reorderListsBtn').innerHTML=listReorderMode?'<i class="fa-solid fa-check"></i> اتمام ترتیب‌بندی':'<i class="fa-solid fa-arrows-up-down"></i> ترتیب لیست‌ها';
+  renderHome();
+};
+let dragCard=null,dragOffX=0,dragOffY=0;
+$('listsGrid').addEventListener('pointerdown',e=>{
+  if(!listReorderMode)return;
+  const card=e.target.closest('.list-card[data-id]');
+  if(!card)return;
+  const rect=card.getBoundingClientRect();
+  dragCard=card;dragOffX=e.clientX-rect.left;dragOffY=e.clientY-rect.top;
+  card.style.position='fixed';card.style.width=rect.width+'px';
+  card.style.left=rect.left+'px';card.style.top=rect.top+'px';
+  card.classList.add('drag-ghost');
+  try{card.setPointerCapture(e.pointerId)}catch{}
+});
+$('listsGrid').addEventListener('pointermove',e=>{
+  if(!dragCard)return;
+  dragCard.style.left=(e.clientX-dragOffX)+'px';
+  dragCard.style.top=(e.clientY-dragOffY)+'px';
+  dragCard.style.visibility='hidden';
+  const under=document.elementFromPoint(e.clientX,e.clientY);
+  dragCard.style.visibility='';
+  const overCard=under&&under.closest('.list-card[data-id]');
+  if(overCard&&overCard!==dragCard){
+    const cards=[...$('listsGrid').querySelectorAll('.list-card[data-id]')];
+    if(cards.indexOf(dragCard)<cards.indexOf(overCard))overCard.after(dragCard);
+    else overCard.before(dragCard);
+  }
+});
+function endListDrag(){
+  if(!dragCard)return;
+  dragCard.classList.remove('drag-ghost');
+  dragCard.style.position='';dragCard.style.left='';dragCard.style.top='';dragCard.style.width='';dragCard.style.visibility='';
+  const newOrder=[...$('listsGrid').querySelectorAll('.list-card[data-id]')].map(c=>c.dataset.id);
+  lists.sort((a,b)=>newOrder.indexOf(a.id)-newOrder.indexOf(b.id));
+  save(SK.lists,lists);
+  dragCard=null;
+  renderHome();
+}
+$('listsGrid').addEventListener('pointerup',endListDrag);
+$('listsGrid').addEventListener('pointercancel',endListDrag);
+
+// Delegated long-press / click handling for home list cards (bound once)
+let homePressTimer=null;
+function clearHomePress(){if(homePressTimer){clearTimeout(homePressTimer);homePressTimer=null}}
+$('listsGrid').addEventListener('click',e=>{
+  if(listReorderMode)return;
+  const card=e.target.closest('.list-card[data-id]');
+  if(!card||longPressTimer)return;
+  activeListId=card.dataset.id;localStorage.setItem(SK.active,activeListId);showScreen('List');
+});
+$('listsGrid').addEventListener('touchstart',e=>{
+  if(listReorderMode)return;
+  const card=e.target.closest('.list-card[data-id]');if(!card)return;
+  const id=card.dataset.id;
+  longPressTimer=setTimeout(()=>{longPressTimer=null;showCtx(e.touches[0].clientX,e.touches[0].clientY,id)},500);
+},{passive:true});
+$('listsGrid').addEventListener('touchend',()=>{if(longPressTimer){clearTimeout(longPressTimer);longPressTimer=null}});
+$('listsGrid').addEventListener('touchmove',()=>{if(longPressTimer){clearTimeout(longPressTimer);longPressTimer=null}});
+$('listsGrid').addEventListener('contextmenu',e=>{
+  if(listReorderMode)return;
+  const card=e.target.closest('.list-card[data-id]');if(!card)return;
+  e.preventDefault();showCtx(e.clientX,e.clientY,card.dataset.id);
+});
+$('listsGrid').addEventListener('mousedown',e=>{
+  if(listReorderMode)return;
+  const card=e.target.closest('.list-card[data-id]');if(!card||e.button!==0)return;
+  const id=card.dataset.id;
+  homePressTimer=setTimeout(()=>{homePressTimer=null;showCtx(e.clientX,e.clientY,id)},500);
+});
+$('listsGrid').addEventListener('mouseup',clearHomePress);
+$('listsGrid').addEventListener('mouseleave',clearHomePress);
+
+function showCtx(x,y,id){if(VIEW_ONLY)return;ctxListId=id;const m=$('ctxMenu');m.style.left=Math.min(x,innerWidth-170)+'px';m.style.top=Math.min(y,innerHeight-100)+'px';m.classList.add('show')}
+function hideCtx(){$('ctxMenu').classList.remove('show')}
+document.addEventListener('click',hideCtx);
+$('ctxEdit').onclick=e=>{e.stopPropagation();hideCtx();openListModal(ctxListId)};
+$('ctxDelete').onclick=e=>{
+  e.stopPropagation();hideCtx();
+  if(lists.length<=1)return toast('حداقل یک لیست باید باشد');
+  if(!confirm('لیست و آیتم‌هاش حذف بشن؟'))return;
+  items=items.filter(i=>i.listId!==ctxListId);
+  lists=lists.filter(l=>l.id!==ctxListId);
+  if(activeListId===ctxListId)activeListId=lists[0].id;
+  save(SK.items,items);save(SK.lists,lists);localStorage.setItem(SK.active,activeListId);
+  renderHome();toast('حذف شد');
+};
+
+// Filters & AZ
+function renderAz(){
+  $('azBar').innerHTML=AZ.map(l=>`<button data-l="${l}" class="${letterFilter===l?'on':''}">${l}</button>`).join('')+`<button data-l="" class="all-btn ${!letterFilter?'on':''}">همه</button>`;
+  $('azBar').querySelectorAll('button').forEach(b=>{
+    b.onclick=()=>{letterFilter=b.dataset.l;page=0;renderAz();renderItems()};
+  });
+}
+
+function renderFilterChips(){
+  const allTags=new Set();
+  items.filter(i=>i.listId===activeListId).forEach(i=>parseTags(i.tags).forEach(t=>allTags.add(t)));
+  let html=`<button class="chip ${ratingFilter==='all'&&!tagFilter?'active':''}" data-f="all">همه</button>
+    <button class="chip ${ratingFilter==='rated'?'active':''}" data-f="rated">نمره‌دار</button>
+    <button class="chip ${ratingFilter==='unrated'?'active':''}" data-f="unrated">بدون نمره</button>
+    <button class="chip ${ratingFilter==='high'?'active':''}" data-f="high">★ ۸+</button>
+    <button class="chip ${ratingFilter==='mid'?'active':''}" data-f="mid">★ ۵–۷.۹</button>
+    <button class="chip ${ratingFilter==='low'?'active':''}" data-f="low">★ زیر ۵</button>
+    <button class="chip ${ratingFilter==='fav'?'active':''}" data-f="fav"><i class="fa-solid fa-heart"></i> موردعلاقه</button>`;
+  [...allTags].sort((a,b)=>a.localeCompare(b,'fa')).forEach(t=>{
+    html+=`<button class="chip ${tagFilter===t?'active':''}" data-tag="${esc(t)}">#${esc(t)}</button>`;
+  });
+  $('filterChips').innerHTML=html;
+  $('filterChips').querySelectorAll('.chip').forEach(c=>{
+    c.onclick=()=>{
+      if(c.dataset.f){ratingFilter=c.dataset.f;tagFilter=''}
+      else if(c.dataset.tag){tagFilter=tagFilter===c.dataset.tag?'':c.dataset.tag;ratingFilter='all'}
+      page=0;renderFilterChips();renderItems();
+    };
+  });
+}
+
+// Secondary tie-break using the manually-saved order, so items sharing the
+// same rating/year/etc. can still be reordered by the user (see reorder arrows).
+function tieBreak(a,b){
+  const order=itemOrder[activeListId]||[];
+  const ia=order.indexOf(a.id),ib=order.indexOf(b.id);
+  if(ia!==-1&&ib!==-1)return ia-ib;
+  if(ia!==-1)return-1;
+  if(ib!==-1)return 1;
+  return 0;
+}
+
+function getFiltered(){
+  let list=items.filter(i=>i.listId===activeListId);
+  const q=$('searchInput').value.trim().toLowerCase();
+  if(q)list=list.filter(i=>(i.title||'').toLowerCase().includes(q)||(i.genre||'').toLowerCase().includes(q)||(i.notes||'').toLowerCase().includes(q)||(i.tags||'').toLowerCase().includes(q)||(i.notePros||'').toLowerCase().includes(q));
+  if(ratingFilter==='rated')list=list.filter(i=>i.rating!=null&&i.rating!=='');
+  else if(ratingFilter==='unrated')list=list.filter(i=>i.rating==null||i.rating==='');
+  else if(ratingFilter==='high')list=list.filter(i=>{const r=parseFloat(i.rating);return!isNaN(r)&&r>=8});
+  else if(ratingFilter==='mid')list=list.filter(i=>{const r=parseFloat(i.rating);return!isNaN(r)&&r>=5&&r<8});
+  else if(ratingFilter==='low')list=list.filter(i=>{const r=parseFloat(i.rating);return!isNaN(r)&&r<5});
+  else if(ratingFilter==='fav')list=list.filter(i=>i.favorite);
+  if(tagFilter)list=list.filter(i=>parseTags(i.tags).includes(tagFilter));
+  if(letterFilter)list=list.filter(i=>letterOf(i.title)===letterFilter);
+
+  const sort=$('sortSelect')?$('sortSelect').value:sortMode;
+  list.sort((a,b)=>{
+    const pa=a.pinned?1:0,pb=b.pinned?1:0;if(pa!==pb)return pb-pa;
+    let d=0;
+    if(sort==='date-desc')d=(parseInt(b.year)||0)-(parseInt(a.year)||0);
+    else if(sort==='date-asc')d=(parseInt(a.year)||0)-(parseInt(b.year)||0);
+    else if(sort==='rating-desc')d=(parseFloat(b.rating)||0)-(parseFloat(a.rating)||0);
+    else if(sort==='rating-asc')d=(parseFloat(a.rating)||0)-(parseFloat(b.rating)||0);
+    else if(sort==='title-asc')d=(a.title||'').localeCompare(b.title||'','fa');
+    else if(sort==='genre-asc')d=(a.genre||'').localeCompare(b.genre||'','fa');
+    return d!==0?d:tieBreak(a,b);
+  });
+  return list;
+}
+
+// Sort modes where manual up/down reordering is meaningful (full manual order,
+// or breaking ties among equally-rated items).
+function reorderableSort(sort){return sort==='manual'||sort==='rating-desc'||sort==='rating-asc'}
+
+function renderItems(){
+  const all=getFiltered();
+  const allInList=items.filter(i=>i.listId===activeListId);
+  const ratedN=allInList.filter(i=>i.rating!=null&&i.rating!=='').length;
+  const pinnedN=allInList.filter(i=>i.pinned).length;
+  $('listStats').textContent=`${fa(allInList.length)} آیتم · ${fa(ratedN)} نمره‌دار · ${fa(allInList.length-ratedN)} بدون نمره`+(pinnedN?` · ${fa(pinnedN)} پین`:'');
+  $('countBadge').textContent=fa(all.length);
+
+  const grid=$('itemsGrid');
+  const manualNow=reorderableSort($('sortSelect').value);
+  grid.className='items-grid size-'+viewSize+(selectMode?' select-mode':'')+(manualNow&&!selectMode?' reorderable':'');
+  const start=0,end=(page+1)*SK.pageSize;
+  const slice=all.slice(start,end);
+
+  if(!all.length){grid.innerHTML='';$('empty').style.display='block';$('loadMore').style.display='none';$('pageInfo').textContent='';return}
+  $('empty').style.display='none';
+  $('loadMore').style.display=end<all.length?'block':'none';
+  $('pageInfo').textContent=end<all.length?`نمایش ${fa(end)} از ${fa(all.length)}`:`${fa(all.length)} آیتم`;
+
+  const manual=reorderableSort($('sortSelect').value);
+  const isWatchlist=!!getList(activeListId).watchlist;
+  grid.innerHTML=slice.map((it,idx)=>{
+    const src=imgOf(it);
+    // صف‌تماشا: نمره IMDb ؛ لیست عادی: نمره خودت
+    let rating=null, ratingLabel='';
+    if(isWatchlist){
+      if(it.imdbRating!=null&&it.imdbRating!==''){rating=parseFloat(it.imdbRating);ratingLabel='IMDb'}
+    } else if(it.rating!=null&&it.rating!==''){
+      rating=parseFloat(it.rating);
+    }
+    const rc=isWatchlist?(rating!=null?'#0a84ff':'#555'):ratingColor(it.rating);
+    const letter=(it.title||'?')[0].toUpperCase();
+    const borderStyle=viewSize==='list'?`border-right-color:${rc}`:`border-top-color:${rc}`;
+    return `<div class="item-card ${selected.has(it.id)?'selected':''}" data-id="${it.id}" data-idx="${idx}" style="${borderStyle};animation-delay:${Math.min(idx*0.03,0.4)}s">
+      <div class="num">${fa(start+idx+1)}</div>
+      <div class="check"></div>
+      ${it.pinned?'<div class="pin-b"><i class="fa-solid fa-thumbtack"></i></div>':''}
+      <button type="button" class="fav-btn ${it.favorite?'on':''}" data-fav="${it.id}" aria-label="${it.favorite?'حذف از موردعلاقه‌ها':'افزودن به موردعلاقه‌ها'}"><i class="fa-${it.favorite?'solid':'regular'} fa-heart"></i></button>
+      ${src?`<img class="poster" src="${src}" loading="lazy" onerror="this.outerHTML='<div class=\\'poster ph\\' style=\\'${phStyle(it.title)}\\'>${esc(letter)}</div>'"/>`:`<div class="poster ph" style="${phStyle(it.title)}">${esc(letter)}</div>`}
+      <div class="body">
+        <div class="title">${esc(it.title)}</div>
+        <div class="meta"><span>${it.year?fa(it.year):''}</span>${rating!=null?`<span class="star" style="${isWatchlist?'color:#0a84ff':''}">${ratingLabel?ratingLabel+' ':''}★ ${fa(rating)}</span>`:''}</div>
+      </div>
+      ${manual?`<div class="drag-handle" data-id="${it.id}" title="بکش برای جابه‌جایی"><i class="fa-solid fa-grip-lines"></i></div>
+      <div class="reorder-btns" data-id="${it.id}">
+        <button type="button" class="reorder-btn" data-dir="up" aria-label="انتقال به بالا" ${idx===0?'disabled':''}><i class="fa-solid fa-chevron-up"></i></button>
+        <button type="button" class="reorder-btn" data-dir="down" aria-label="انتقال به پایین" ${idx===slice.length-1&&end>=all.length?'disabled':''}><i class="fa-solid fa-chevron-down"></i></button>
+      </div>`:''}
+    </div>`;
+  }).join('');
+}
+
+// Delegated click handler for item cards (bound once, not per render)
+$('itemsGrid').addEventListener('click',e=>{
+  if(e.target.closest('.reorder-btns')||e.target.closest('.fav-btn')||e.target.closest('.drag-handle'))return;
+  if(itemDidDrag){itemDidDrag=false;return} // بعد از درگ، کلیک جزئیات باز نشه
+  const card=e.target.closest('.item-card');
+  if(!card)return;
+  const id=card.dataset.id;
+  if(selectMode){
+    if(selected.has(id))selected.delete(id);else selected.add(id);
+    card.classList.toggle('selected',selected.has(id));
+    updateBulk();
+    return;
+  }
+  openDetail(id);
+});
+
+// Delegated favorite-heart toggle
+$('itemsGrid').addEventListener('click',e=>{
+  const favBtn=e.target.closest('.fav-btn');
+  if(!favBtn)return;
+  e.stopPropagation();
+  if(VIEW_ONLY)return;
+  const it=items.find(x=>x.id===favBtn.dataset.fav);if(!it)return;
+  it.favorite=!it.favorite;save(SK.items,items);
+  renderItems();
+});
+
+$('loadMore').onclick=()=>{page++;renderItems()};
+$('searchInput').oninput=debounce(()=>{page=0;renderItems()},220);
+$('sortSelect').onchange=()=>{sortMode=$('sortSelect').value;setListPref(activeListId,{sort:sortMode});page=0;renderItems()};
+
+document.querySelectorAll('.view-btns button').forEach(b=>{
+  b.onclick=()=>{viewSize=b.dataset.size;setListPref(activeListId,{view:viewSize});document.querySelectorAll('.view-btns button').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderItems()};
+  b.classList.toggle('active',b.dataset.size===viewSize);
+});
+
+// Select mode & bulk
+$('selectModeBtn').onclick=()=>{
+  selectMode=!selectMode;
+  if(!selectMode){selected.clear();$('bulkBar').classList.remove('show')}
+  $('selectModeBtn').style.background=selectMode?'var(--accent)':'';
+  $('selectModeBtn').style.color=selectMode?'#000':'';
+  renderItems();
+};
+function exitSelectMode(){selectMode=false;selected.clear();$('bulkBar').classList.remove('show');$('selectModeBtn').style.background='';$('selectModeBtn').style.color='';}
+function updateBulk(){
+  if(selected.size){$('bulkBar').classList.add('show');$('bulkCount').textContent=fa(selected.size)+' انتخاب'}
+  else $('bulkBar').classList.remove('show');
+}
+$('bulkCancel').onclick=()=>{exitSelectMode();renderItems()};
+$('bulkDelete').onclick=()=>{
+  if(VIEW_ONLY)return;
+  if(!selected.size||!confirm(fa(selected.size)+' آیتم حذف بشه؟'))return;
+  items=items.filter(i=>!selected.has(i.id));
+  save(SK.items,items);exitSelectMode();renderItems();toast('حذف شد');
+};
+
+// Manual reordering: delegated up/down buttons (bound once, no per-render listeners)
+$('itemsGrid').addEventListener('click',e=>{
+  const btn=e.target.closest('.reorder-btn');
+  if(!btn||btn.disabled)return;
+  e.stopPropagation();
+  const id=btn.closest('.reorder-btns').dataset.id;
+  const list=getFiltered().map(i=>i.id);
+  const idx=list.indexOf(id);
+  if(idx===-1)return;
+  const ni=btn.dataset.dir==='up'?idx-1:idx+1;
+  if(ni<0||ni>=list.length)return;
+  [list[idx],list[ni]]=[list[ni],list[idx]];
+  itemOrder[activeListId]=list;save(SK.order,itemOrder);renderItems();
+});
+
+/* ---------- درگ‌اند‌دراپ آیتم‌ها (فقط از دستگیره پایین کارت + فقط ماوس) ----------
+   طبق قانون فایل: کشیدن آزاد با انگشت روی موبایل حذف شده.
+   حالا فقط از نوار پایین کارت (grip) شروع می‌شه تا کلیک عادی برای باز کردن
+   جزئیات کار کنه. انیمیشن نرم‌تر شبیه سامسونگ. */
+let itemDragCard=null, itemDragOffX=0, itemDragOffY=0, itemDragId=null, itemDidDrag=false;
+$('itemsGrid').addEventListener('pointerdown',e=>{
+  if(VIEW_ONLY||selectMode||e.pointerType!=='mouse'||e.button!==0)return;
+  if(!$('itemsGrid').classList.contains('reorderable'))return;
+  const handle=e.target.closest('.drag-handle');
+  if(!handle)return;
+  const card=handle.closest('.item-card[data-id]');
+  if(!card)return;
+  e.preventDefault();
+  e.stopPropagation();
+  itemDidDrag=false;
+  const rect=card.getBoundingClientRect();
+  itemDragCard=card;itemDragId=card.dataset.id;
+  itemDragOffX=e.clientX-rect.left;itemDragOffY=e.clientY-rect.top;
+  card.style.position='fixed';card.style.width=rect.width+'px';card.style.height=rect.height+'px';
+  card.style.left=rect.left+'px';card.style.top=rect.top+'px';card.style.zIndex='500';
+  card.classList.add('drag-ghost');
+  try{card.setPointerCapture(e.pointerId)}catch{}
+});
+$('itemsGrid').addEventListener('pointermove',e=>{
+  if(!itemDragCard)return;
+  itemDidDrag=true;
+  itemDragCard.style.left=(e.clientX-itemDragOffX)+'px';
+  itemDragCard.style.top=(e.clientY-itemDragOffY)+'px';
+  itemDragCard.style.visibility='hidden';
+  const under=document.elementFromPoint(e.clientX,e.clientY);
+  itemDragCard.style.visibility='';
+  const overCard=under&&under.closest('.item-card[data-id]');
+  if(overCard&&overCard!==itemDragCard){
+    const cards=[...$('itemsGrid').querySelectorAll('.item-card[data-id]')];
+    if(cards.indexOf(itemDragCard)<cards.indexOf(overCard))overCard.after(itemDragCard);
+    else overCard.before(itemDragCard);
+  }
+});
+function endItemDrag(){
+  if(!itemDragCard)return;
+  const card=itemDragCard;
+  card.classList.remove('drag-ghost');
+  card.classList.add('dropping');
+  card.style.position='';card.style.left='';card.style.top='';
+  card.style.width='';card.style.height='';card.style.zIndex='';card.style.visibility='';
+  if(itemDidDrag){
+    const newOrder=[...$('itemsGrid').querySelectorAll('.item-card[data-id]')].map(c=>c.dataset.id);
+    const full=getFiltered().map(i=>i.id);
+    const visibleSet=new Set(newOrder);
+    const remaining=full.filter(id=>!visibleSet.has(id));
+    itemOrder[activeListId]=[...newOrder,...remaining.filter(id=>!newOrder.includes(id))];
+    save(SK.order,itemOrder);
+  }
+  itemDragCard=null;itemDragId=null;
+  setTimeout(()=>{card.classList.remove('dropping');if(itemDidDrag)renderItems()},320);
+}
+$('itemsGrid').addEventListener('pointerup',endItemDrag);
+$('itemsGrid').addEventListener('pointercancel',endItemDrag);
+
+// Switching between lists — restricted to the dedicated "listSwitch" bar
+// (swipe left/right there, or tap the ‹ › arrows) so browsing items never
+// accidentally triggers a list change.
+function switchList(dir){
+  if(lists.length<2)return;
+  const idx=lists.findIndex(l=>l.id===activeListId);
+  const ni=(idx+dir+lists.length)%lists.length; // loops around at both ends
+  activeListId=lists[ni].id;localStorage.setItem(SK.active,activeListId);
+  page=0;letterFilter='';ratingFilter='all';tagFilter='';
+  const l=getList(activeListId);
+  const label=l.name+(l.watchlist?' ⏳':'')+(l.series?' 📺':'');
+  $('topTitle').textContent=label;$('lsName').textContent=label;
+  if($('linkWatchlistBtn'))$('linkWatchlistBtn').style.display=(l.watchlist&&!VIEW_ONLY)?'flex':'none';
+  applyListPrefsUI();
+  renderAz();renderFilterChips();renderItems();
+  toast(label);
+}
+$('lsPrev').onclick=()=>switchList(-1);
+$('lsNext').onclick=()=>switchList(1);
+$('shareListBtn').onclick=()=>{if(!VIEW_ONLY)exportViewOnly()};
+// وصل کل صف‌تماشا به یک لیست مقصد (یک‌بار برای همه)
+$('linkWatchlistBtn').onclick=()=>{
+  if(VIEW_ONLY)return;
+  const cur=getList(activeListId);
+  if(!cur.watchlist)return;
+  if(!fillNormalListOptions(cur.linkedListId))return toast('اول یه لیست عادی (غیر صف‌تماشا) بساز');
+  $('moveModalTitle').textContent='وصل صف‌تماشا';
+  $('moveModalHint').textContent='کل این صف‌تماشا به لیست انتخابی وصل می‌شه. بعد هر بار «دیدم» بزنی فقط نمره می‌گیری و می‌ره همونجا.';
+  $('moveListFg').style.display='block';
+  $('moveRatingFg').style.display='none';
+  $('doMoveToList').dataset.mode='linkList';
+  $('doMoveToList').innerHTML='<i class="fa-solid fa-link"></i> وصل کردن صف‌تماشا';
+  $('moveToListModal').classList.add('show');
+};
+let listSwitchStartX=0;
+$('listSwitch').addEventListener('touchstart',e=>{listSwitchStartX=e.touches[0].clientX},{passive:true});
+$('listSwitch').addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-listSwitchStartX;
+  if(Math.abs(dx)<50)return;
+  // RTL: swipe right (dx>0) -> previous, swipe left -> next
+  switchList(dx>0?-1:1);
+},{passive:true});
+
+// List modal
+function buildColors(sel){
+  const cont=$('listColors');
+  cont.innerHTML=COLORS.map(c=>`<div class="cdot ${c===sel?'on':''}" style="background:${c}" data-c="${c}"></div>`).join('');
+  $('listColor').value=sel;
+  cont.querySelectorAll('.cdot').forEach(d=>{d.onclick=()=>{cont.querySelectorAll('.cdot').forEach(x=>x.classList.remove('on'));d.classList.add('on');$('listColor').value=d.dataset.c}});
+}
+function openListModal(id){
+  if(VIEW_ONLY)return;
+  listOnlineOn=true;listSeriesOn=false;listWatchlistOn=false;
+  if(id){
+    const l=getList(id);
+    $('listModalTitle').textContent='ویرایش لیست';$('listEditId').value=id;$('listName').value=l.name;
+    buildColors(l.color);listOnlineOn=!!l.online;listSeriesOn=!!l.series;listWatchlistOn=!!l.watchlist;$('listDelBtn').style.display='block';
+  } else {
+    $('listModalTitle').textContent='لیست جدید';$('listEditId').value='';$('listName').value='';
+    buildColors('#f5c518');$('listDelBtn').style.display='none';
+  }
+  $('listOnline').classList.toggle('on',listOnlineOn);
+  $('listSeries').classList.toggle('on',listSeriesOn);
+  $('listWatchlist').classList.toggle('on',listWatchlistOn);
+  $('listModal').classList.add('show');
+}
+$('listOnline').onclick=()=>{listOnlineOn=!listOnlineOn;$('listOnline').classList.toggle('on',listOnlineOn)};
+$('listSeries').onclick=()=>{listSeriesOn=!listSeriesOn;$('listSeries').classList.toggle('on',listSeriesOn)};
+$('listWatchlist').onclick=()=>{
+  if(!listWatchlistOn && !watchlistWarnDismissed){
+    // یک‌بار اخطار با گزینه «یادآوری نکن»
+    const wrap=document.createElement('div');
+    wrap.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:400;display:flex;align-items:center;justify-content:center;padding:20px';
+    wrap.innerHTML=`<div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px;max-width:340px;width:100%;text-align:right">
+      <p style="font-weight:700;margin-bottom:10px;color:var(--accent)">صف تماشا</p>
+      <p style="font-size:.9rem;line-height:1.6;margin-bottom:14px">اگه این گزینه رو روشن کنی، دیگه نمی‌تونی به آیتم‌های این لیست نمره بدی. فقط برای چیزاییه که هنوز ندیدی.</p>
+      <label style="display:flex;align-items:center;gap:8px;font-size:.84rem;margin-bottom:16px;cursor:pointer">
+        <input type="checkbox" id="wlDontRemind"/> دیگه یادآوری نکن
+      </label>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost" id="wlCancel" style="flex:1">لغو</button>
+        <button class="btn btn-main" id="wlOk" style="flex:1">باشه، روشن کن</button>
+      </div>
+    </div>`;
+    document.body.appendChild(wrap);
+    wrap.querySelector('#wlCancel').onclick=()=>wrap.remove();
+    wrap.querySelector('#wlOk').onclick=()=>{
+      if(wrap.querySelector('#wlDontRemind').checked){
+        watchlistWarnDismissed=true;
+        localStorage.setItem('pimdb_wl_warn','1');
+      }
+      listWatchlistOn=true;
+      $('listWatchlist').classList.add('on');
+      wrap.remove();
+    };
+    return;
+  }
+  listWatchlistOn=!listWatchlistOn;
+  $('listWatchlist').classList.toggle('on',listWatchlistOn);
+};
+$('listSaveBtn').onclick=()=>{
+  const name=$('listName').value.trim();if(!name)return toast('نام لازم است');
+  const id=$('listEditId').value;
+  const dup=lists.find(l=>l.name===name&&l.id!==id);
+  if(dup){
+    if(!confirm('لیستی با این اسم وجود داره. جایگزین بشه؟\n(لیست قبلی و آیتم‌هاش حذف می‌شن)'))return;
+    items=items.filter(i=>i.listId!==dup.id);lists=lists.filter(l=>l.id!==dup.id);
+    if(activeListId===dup.id)activeListId=id||lists[0]?.id;save(SK.items,items);
+  }
+  if(id){
+    const idx=lists.findIndex(l=>l.id===id);
+    if(idx>=0){
+      lists[idx].name=name;lists[idx].color=$('listColor').value;lists[idx].online=listOnlineOn;lists[idx].series=listSeriesOn;lists[idx].watchlist=listWatchlistOn;
+      if(!listWatchlistOn)lists[idx].linkedListId=null; // دیگه صف‌تماشا نیست
+    }
+  } else {
+    const nid=uid();lists.push({id:nid,name,color:$('listColor').value,online:listOnlineOn,series:listSeriesOn,watchlist:listWatchlistOn,linkedListId:null});
+    activeListId=nid;localStorage.setItem(SK.active,nid);
+  }
+  // اگر صف‌تماشا شد: فقط نمره‌ها رو پاک کن
+  if(listWatchlistOn){
+    const lid=id||activeListId;
+    let cleaned=0;
+    items.forEach(it=>{
+      if(it.listId===lid && it.rating!=null&&it.rating!==''){
+        it.rating=null;cleaned++;
+      }
+    });
+    if(cleaned)save(SK.items,items);
+  }
+  save(SK.lists,lists);localStorage.setItem(SK.active,activeListId);
+  $('listModal').classList.remove('show');renderHome();toast('ذخیره شد');
+};
+$('listDelBtn').onclick=()=>{
+  const id=$('listEditId').value;
+  if(lists.length<=1)return toast('حداقل یک لیست باید باشد');
+  if(!confirm('لیست و آیتم‌هاش حذف بشن؟'))return;
+  items=items.filter(i=>i.listId!==id);lists=lists.filter(l=>l.id!==id);
+  if(activeListId===id)activeListId=lists[0].id;
+  save(SK.items,items);save(SK.lists,lists);localStorage.setItem(SK.active,activeListId);
+  $('listModal').classList.remove('show');showScreen('Home');toast('حذف شد');
+};
+
+// Form
+function openForm(id=null){
+  if(VIEW_ONLY)return;
+  currentId=id;imgData=null;formDirty=false;
+  $('itemForm').reset();$('preview').classList.remove('show');$('preview').src='';
+  $('deleteBtn').style.display='none';$('formTitle').textContent=id?'ویرایش':'افزودن';
+  $('imageUrl').value='';$('lookupBox').classList.remove('show');$('lookupBox').innerHTML='';
+  $('itemList').innerHTML=lists.map(l=>`<option value="${l.id}" ${l.id===activeListId?'selected':''}>${esc(l.name)}</option>`).join('');
+  updateSearchUI();
+  if(id){
+    const it=items.find(x=>x.id===id);if(!it)return;
+    const inWatch=!!getList(it.listId||activeListId).watchlist;
+    $('title').value=it.title||'';$('year').value=it.year||'';$('genre').value=it.genre||'';
+    $('tags').value=it.tags||'';$('notes').value=it.notes||'';$('rating').value=inWatch?'':(it.rating!=null?it.rating:'');
+    $('notePros').value=it.notePros||'';$('noteCons').value=it.noteCons||'';$('noteRewatch').value=it.noteRewatch||'';
+    $('imageUrl').value=it.imageUrl||'';$('itemList').value=it.listId||activeListId;
+    if(it.image){imgData=it.image;$('preview').src=it.image;$('preview').classList.add('show')}
+    else if(it.imageUrl){$('preview').src=it.imageUrl;$('preview').classList.add('show')}
+    $('deleteBtn').style.display='block';updateSearchUI();
+  }
+  $('formModal').classList.add('show');
+  // mark dirty on input
+  $('itemForm').querySelectorAll('input,textarea,select').forEach(el=>{
+    el.addEventListener('input',()=>{formDirty=true},{once:true});
+  });
+}
+function updateSearchUI(){
+  const list=getList($('itemList').value);
+  const online=list.online;
+  $('searchBtn').style.display=online?'block':'none';
+  $('typeRow').style.display=online?'flex':'none';
+  // صف تماشا: فقط نمره قفل (سال و یادداشت‌ها آزاد)
+  const ratingEl=$('rating');
+  const ratingFg=ratingEl?.closest('.fg');
+  if(list.watchlist){
+    ratingEl.value='';
+    ratingEl.disabled=true;
+    ratingEl.placeholder='در صف تماشا نمره نداره — با «دیدم» نمره بده';
+    if(ratingFg)ratingFg.style.opacity='.45';
+  } else {
+    ratingEl.disabled=false;
+    ratingEl.placeholder='۹.۸';
+    if(ratingFg)ratingFg.style.opacity='1';
+  }
+  // بقیه فیلدها همیشه آزاد
+  ['year','notePros','noteCons'].forEach(id=>{
+    const el=$(id);if(!el)return;
+    el.disabled=false;
+    const fg=el.closest('.fg');if(fg)fg.style.opacity='1';
+  });
+}
+$('itemList').onchange=updateSearchUI;
+
+function tryCloseForm(){
+  if(formDirty&&!confirm('تغییرات ذخیره نشد. خارج شی؟'))return;
+  $('formModal').classList.remove('show');formDirty=false;
+}
+$('closeForm').onclick=tryCloseForm;
+
+$('searchBtn').onclick=async()=>{
+  const q=$('title').value.trim();if(!q)return toast('اول اسم رو بنویس');
+  const type=document.querySelector('input[name="stype"]:checked')?.value||'movie';
+  $('lookupBox').innerHTML='';$('lookupBox').classList.remove('show');
+  $('searchBtn').disabled=true;$('searchBtn').textContent='...';
+  try{
+    if(type==='game'){await searchGames(q)}
+    else if(omdbKey)await searchMovies(q,type);
+    else{window.open('https://www.imdb.com/find/?q='+encodeURIComponent(q),'_blank');toast('صفحه IMDb')}
+  }catch(e){toast('خطا در اتصال');console.error(e)}
+  finally{$('searchBtn').disabled=false;$('searchBtn').textContent='جستجو'}
+};
+
+async function searchMovies(q,type){
+  const t=type==='series'?'series':'movie';
+  let res=await fetch(`https://www.omdbapi.com/?apikey=${omdbKey}&s=${encodeURIComponent(q)}&type=${t}`);
+  let data=await res.json();
+  if(data.Response==='False'&&t==='movie'){
+    res=await fetch(`https://www.omdbapi.com/?apikey=${omdbKey}&s=${encodeURIComponent(q)}&type=series`);
+    data=await res.json();
+  }
+  if(data.Response==='False')return toast(data.Error||'پیدا نشد');
+  const results=data.Search||[];if(!results.length)return toast('نتیجه‌ای نیست');
+  $('lookupBox').innerHTML=results.slice(0,10).map(r=>`<div class="lookup-item" data-id="${r.imdbID}" data-type="${r.Type}">
+    <img src="${r.Poster!=='N/A'?r.Poster:''}" onerror="this.style.opacity=.3"/>
+    <div><div class="t">${esc(r.Title)}</div><div class="m">${r.Year||''} · ${r.Type==='series'?'سریال':'فیلم'}</div></div>
+  </div>`).join('');
+  $('lookupBox').classList.add('show');
+  $('lookupBox').querySelectorAll('.lookup-item').forEach(el=>{el.onclick=()=>pickMovie(el.dataset.id,el.dataset.type)});
+}
+
+// جستجوی بازی: با کلید RAWG سال ساخت و ژانر هم می‌آد؛ بدون کلید، CheapShark (بدون سال/ژانر)
+let gameSearchResults=[];
+async function searchGames(q){
+  try{
+    if(rawgKey){
+      const res=await fetch(`https://api.rawg.io/api/games?key=${encodeURIComponent(rawgKey)}&search=${encodeURIComponent(q)}&page_size=10`);
+      if(!res.ok){toast('خطا در جستجوی بازی (کد '+res.status+')');return}
+      const data=await res.json();
+      const results=data.results||[];
+      if(!results.length)return toast('پیدا نشد');
+      gameSearchResults=results;
+      $('lookupBox').innerHTML=results.map((r,i)=>{
+        const year=r.released?r.released.slice(0,4):'';
+        const genre=(r.genres||[]).map(g=>g.name).join('، ');
+        return `<div class="lookup-item" data-idx="${i}">
+          <img src="${r.background_image||''}" onerror="this.style.opacity=.3"/>
+          <div><div class="t">${esc(r.name)}</div><div class="m">${year?year+' · ':''}${esc(genre)||'بازی'}</div></div>
+        </div>`;
+      }).join('');
+      $('lookupBox').classList.add('show');
+      $('lookupBox').querySelectorAll('.lookup-item').forEach(el=>{el.onclick=()=>pickGameRawg(+el.dataset.idx)});
+      return;
+    }
+    const res=await fetch(`https://www.cheapshark.com/api/1.0/games?title=${encodeURIComponent(q)}&limit=10`);
+    if(!res.ok){toast('خطا در جستجوی بازی (کد '+res.status+')');return}
+    const data=await res.json();
+    if(!data?.length)return toast('پیدا نشد');
+    $('lookupBox').innerHTML=data.map(r=>`<div class="lookup-item" data-gid="${r.gameID}" data-title="${esc(r.external)}" data-thumb="${r.thumb||''}">
+      <img src="${r.thumb||''}" onerror="this.style.opacity=.3"/>
+      <div><div class="t">${esc(r.external)}</div><div class="m">بازی — برای سال/ژانر خودکار، کلید RAWG رو تنظیم کن</div></div>
+    </div>`).join('');
+    $('lookupBox').classList.add('show');
+    $('lookupBox').querySelectorAll('.lookup-item').forEach(el=>{el.onclick=()=>pickGame(el.dataset.gid,el.dataset.title,el.dataset.thumb)});
+  }catch(e){
+    console.error(e);
+    toast('اتصال برقرار نشد (اینترنت را چک کن)');
+  }
+}
+
+async function pickMovie(imdbID,type){
+  $('lookupBox').classList.remove('show');$('searchBtn').disabled=true;$('searchBtn').textContent='...';
+  try{
+    const res=await fetch(`https://www.omdbapi.com/?apikey=${omdbKey}&i=${imdbID}`);
+    const d=await res.json();
+    if(d.Response==='False')return toast(d.Error||'خطا');
+    $('title').value=d.Title||'';$('year').value=(d.Year||'').toString().slice(0,4);$('genre').value=d.Genre||'';
+    // نمره کاربر رو خودکار پر نمی‌کنیم؛ فقط نمره اصلی IMDb رو ذخیره می‌کنیم برای نمایش در صف‌تماشا
+    if(d.Poster&&d.Poster!=='N/A'){$('imageUrl').value=d.Poster;$('preview').src=d.Poster;$('preview').classList.add('show');imgData=null}
+    $('itemForm').dataset.imdb=imdbID;
+    $('itemForm').dataset.mediaType=d.Type||type||'movie';
+    $('itemForm').dataset.imdbRating=(d.imdbRating&&d.imdbRating!=='N/A')?d.imdbRating:'';
+    formDirty=true;toast('اطلاعات پر شد');
+  }catch{toast('خطا')}
+  finally{$('searchBtn').disabled=false;$('searchBtn').textContent='جستجو'}
+}
+
+async function pickGame(gid,title,thumb){
+  $('lookupBox').classList.remove('show');
+  $('title').value=title||'';
+  if(thumb){$('imageUrl').value=thumb;$('preview').src=thumb;$('preview').classList.add('show');imgData=null}
+  formDirty=true;toast('اطلاعات بازی پر شد — سال/ژانر رو خودت کامل کن');
+}
+function pickGameRawg(idx){
+  const r=gameSearchResults[idx];if(!r)return;
+  $('lookupBox').classList.remove('show');
+  $('title').value=r.name||'';
+  if($('year'))$('year').value=r.released?r.released.slice(0,4):'';
+  if($('genre'))$('genre').value=(r.genres||[]).map(g=>g.name).join('، ');
+  if(r.background_image){$('imageUrl').value=r.background_image;$('preview').src=r.background_image;$('preview').classList.add('show');imgData=null}
+  formDirty=true;toast('اطلاعات بازی پر شد');
+}
+
+$('imageUrl').oninput=e=>{const u=e.target.value.trim();if(u){$('preview').src=u;$('preview').classList.add('show');imgData=null}else if(!imgData)$('preview').classList.remove('show');formDirty=true};
+$('imageFile').onchange=e=>{
+  const f=e.target.files[0];if(!f)return;if(f.size>5e6)return toast('حجم زیاد');
+  const r=new FileReader();r.onload=ev=>{
+    const img=new Image();img.onload=()=>{
+      const c=document.createElement('canvas');let w=img.width,h=img.height;const max=700;
+      if(w>max||h>max){if(w>h){h=Math.round(h*max/w);w=max}else{w=Math.round(w*max/h);h=max}}
+      c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
+      imgData=c.toDataURL('image/jpeg',0.78);$('preview').src=imgData;$('preview').classList.add('show');$('imageUrl').value='';formDirty=true;
+    };img.src=ev.target.result;
+  };r.readAsDataURL(f);
+};
+
+$('itemForm').onsubmit=e=>{
+  e.preventDefault();
+  const title=$('title').value.trim();if(!title)return;
+  const targetList=getList($('itemList').value);
+  let rating=null;const rv=$('rating').value;
+  if(targetList.watchlist){
+    rating=null; // صف تماشا: فقط نمره ممنوع
+  } else if(rv!==''){
+    rating=Math.round(parseFloat(rv)*10)/10;
+    if(isNaN(rating)||rating<0||rating>10)return toast('نمره ۰ تا ۱۰');
+  }
+  const url=$('imageUrl').value.trim()||null;
+  const imdbRatingFromForm=$('itemForm').dataset.imdbRating||null;
+  const data={
+    title,year:$('year').value||null,genre:$('genre').value.trim(),tags:$('tags').value.trim(),
+    rating,notes:$('notes').value.trim(),notePros:$('notePros').value.trim(),noteCons:$('noteCons').value.trim(),
+    noteRewatch:$('noteRewatch').value,listId:$('itemList').value,
+    imageUrl:url,image:url?null:(imgData||null),updatedAt:Date.now(),
+    imdbID:$('itemForm').dataset.imdb||null,mediaType:$('itemForm').dataset.mediaType||null,
+    imdbRating:imdbRatingFromForm||null
+  };
+  if(currentId){
+    const idx=items.findIndex(x=>x.id===currentId);
+    if(idx>=0){
+      if(!data.imageUrl&&!data.image&&items[idx].image)data.image=items[idx].image;
+      if(!data.imdbID&&items[idx].imdbID)data.imdbID=items[idx].imdbID;
+      // اگر جستجوی جدید نبود، نمره IMDb قبلی رو نگه دار
+      if(!data.imdbRating&&items[idx].imdbRating)data.imdbRating=items[idx].imdbRating;
+      data.episodes=items[idx].episodes||[];
+      data.pinned=items[idx].pinned;
+      data.favorite=items[idx].favorite;
+      items[idx]={...items[idx],...data};toast('ذخیره شد');
+    }
+  } else {
+    items.unshift({id:uid(),createdAt:Date.now(),pinned:false,favorite:false,episodes:[],...data});toast('اضافه شد');
+  }
+  save(SK.items,items);activeListId=data.listId;localStorage.setItem(SK.active,activeListId);
+  formDirty=false;$('formModal').classList.remove('show');showScreen('List');
+};
+
+$('deleteBtn').onclick=()=>{
+  if(!currentId||!confirm('حذف بشه؟'))return;
+  items=items.filter(x=>x.id!==currentId);save(SK.items,items);
+  $('formModal').classList.remove('show');$('detailModal').classList.remove('show');renderItems();toast('حذف شد');
+};
+
+// Detail
+function openDetail(id){
+  const it=items.find(x=>x.id===id);if(!it)return;currentId=id;
+  const list=getList(it.listId);const src=imgOf(it);
+  const rating=it.rating!=null&&it.rating!==''?parseFloat(it.rating):null;
+  const tags=parseTags(it.tags);
+  const letter=(it.title||'?')[0].toUpperCase();
+  let notesHtml='';
+  if(it.notePros||it.noteCons||it.noteRewatch){
+    notesHtml+='<div class="detail-notes">';
+    if(it.notePros)notesHtml+=`<div><strong style="color:var(--ok)">قوت:</strong> ${esc(it.notePros)}</div>`;
+    if(it.noteCons)notesHtml+=`<div><strong style="color:var(--danger)">ضعف:</strong> ${esc(it.noteCons)}</div>`;
+    if(it.noteRewatch)notesHtml+=`<div><strong>دوباره؟</strong> ${it.noteRewatch==='yes'?'بله':it.noteRewatch==='no'?'نه':'شاید'}</div>`;
+    notesHtml+='</div>';
+  }
+  if(it.notes)notesHtml+=`<div class="detail-notes">${esc(it.notes)}</div>`;
+  if(!notesHtml)notesHtml='<p style="color:var(--muted);margin-bottom:10px">یادداشتی نیست</p>';
+
+  const isWatch=!!list.watchlist;
+  const listLinked=list.linkedListId?getList(list.linkedListId):null;
+  const imdbR=(it.imdbRating!=null&&it.imdbRating!=='')?parseFloat(it.imdbRating):null;
+  $('detailBody').innerHTML=`
+    ${src?`<div class="detail-poster-wrap"><div class="detail-poster-bg" style="background-image:url('${src}')"></div><img class="detail-poster" src="${src}" onerror="this.closest('.detail-poster-wrap').style.display='none'"/></div>`:`<div class="detail-poster ph" style="${phStyle(it.title)};display:flex;align-items:center;justify-content:center;font-size:3rem;font-weight:700">${esc(letter)}</div>`}
+    <div class="detail-title">${esc(it.title)}</div>
+    <div class="detail-meta">
+      <span class="badge" style="background:${list.color}33;color:${list.color}">${esc(list.name)}</span>
+      ${it.year?`<span>${fa(it.year)}</span>`:''}
+      ${it.genre?`<span>${esc(it.genre)}</span>`:''}
+      ${isWatch&&imdbR!=null?`<span class="detail-star" style="color:#0a84ff">IMDb ★ ${fa(imdbR)}</span>`:''}
+      ${!isWatch&&rating!=null?`<span class="detail-star">★ ${fa(rating)}</span>`:''}
+      ${isWatch&&listLinked?`<span class="badge" style="background:rgba(10,132,255,.2);color:#0a84ff">🔗 ${esc(listLinked.name)}</span>`:''}
+    </div>
+    ${tags.length?`<div class="detail-tags">${tags.map(t=>`<span>#${esc(t)}</span>`).join('')}</div>`:''}
+    ${notesHtml}
+    ${src?'<p style="font-size:.75rem;color:var(--muted)">برای بزرگ‌شدن روی پوستر بزن</p>':''}
+  `;
+  $('detailModal').classList.add('show');
+  const poster=$('detailBody').querySelector('.detail-poster,.detail-poster-wrap');
+  if(poster&&src)poster.onclick=()=>{$('posterFullImg').src=src;$('posterFull').classList.add('show')};
+  $('pinBtn').innerHTML=it.pinned?'<i class="fa-solid fa-thumbtack"></i> برداشتن پین':'<i class="fa-solid fa-thumbtack"></i> پین کردن';
+  $('favToggleBtn').innerHTML=it.favorite?'<i class="fa-solid fa-heart" style="color:#ff453a"></i>':'<i class="fa-regular fa-heart"></i>';
+  $('favToggleBtn').setAttribute('aria-label',it.favorite?'حذف از موردعلاقه‌ها':'افزودن به موردعلاقه‌ها');
+  const showEp=!!(list.series||it.mediaType==='series'||(it.episodes&&it.episodes.length));
+  $('episodesBtn').style.display=showEp?'block':'none';
+  // فقط صف‌تماشا: دکمه دیدم
+  $('seenBtn').style.display=(list.watchlist&&!VIEW_ONLY)?'block':'none';
+}
+$('posterFull').onclick=()=>$('posterFull').classList.remove('show');
+$('editBtn').onclick=()=>{$('detailModal').classList.remove('show');openForm(currentId)};
+$('pinBtn').onclick=()=>{
+  if(VIEW_ONLY)return;
+  const it=items.find(x=>x.id===currentId);if(!it)return;
+  it.pinned=!it.pinned;save(SK.items,items);toast(it.pinned?'پین شد':'پین برداشته شد');
+  $('detailModal').classList.remove('show');renderItems();
+};
+$('favToggleBtn').onclick=()=>{
+  if(VIEW_ONLY)return;
+  const it=items.find(x=>x.id===currentId);if(!it)return;
+  it.favorite=!it.favorite;save(SK.items,items);
+  $('favToggleBtn').innerHTML=it.favorite?'<i class="fa-solid fa-heart" style="color:#ff453a"></i>':'<i class="fa-regular fa-heart"></i>';
+  toast(it.favorite?'به موردعلاقه‌ها اضافه شد':'از موردعلاقه‌ها حذف شد');
+  renderItems();
+};
+$('imgExportBtn').onclick=()=>$('imgExportModal').classList.add('show');
+$('imgExportVertical').onclick=()=>{$('imgExportModal').classList.remove('show');exportCardImage(currentId,'vertical')};
+$('imgExportHorizontal').onclick=()=>{$('imgExportModal').classList.remove('show');exportCardImage(currentId,'horizontal')};
+
+function fillNormalListOptions(selectedId){
+  const normalLists=lists.filter(l=>!l.watchlist);
+  if(!normalLists.length)return false;
+  $('moveTargetList').innerHTML=normalLists.map(l=>`<option value="${l.id}" ${l.id===selectedId?'selected':''}>${esc(l.name)}</option>`).join('');
+  return true;
+}
+
+// دکمه «دیدم» روی کارت — نمره + انتقال
+// اگه کل صف‌تماشا وصل باشه فقط نمره؛ وگرنه لیست مقصد هم می‌پرسه
+$('seenBtn').onclick=()=>{
+  if(VIEW_ONLY)return;
+  const it=items.find(x=>x.id===currentId);if(!it)return;
+  const parentList=getList(it.listId);
+  const destId=parentList.linkedListId;
+  const hasLink=!!(destId&&getList(destId)&&!getList(destId).watchlist);
+  if(!fillNormalListOptions(destId))return toast('اول یه لیست عادی (غیر صف‌تماشا) بساز');
+  $('moveModalTitle').textContent='دیدم';
+  $('moveRating').value='';
+  $('moveRatingFg').style.display='block';
+  if(hasLink){
+    $('moveModalHint').textContent='این صف‌تماشا به «'+getList(destId).name+'» وصل شده. فقط نمره بده تا منتقل بشه.';
+    $('moveListFg').style.display='none';
+  } else {
+    $('moveModalHint').textContent='صف‌تماشا هنوز وصل نشده. لیست مقصد رو انتخاب کن و نمره بده.';
+    $('moveListFg').style.display='block';
+  }
+  $('doMoveToList').dataset.mode='seen';
+  $('doMoveToList').innerHTML='<i class="fa-solid fa-eye"></i> دیدم و ذخیره';
+  $('moveToListModal').classList.add('show');
+};
+
+$('doMoveToList').onclick=()=>{
+  const mode=$('doMoveToList').dataset.mode||'seen';
+  const targetId=$('moveTargetList').value;
+  const target=getList(targetId);
+
+  // وصل کل صف‌تماشا (یک‌بار)
+  if(mode==='linkList'){
+    if(!target||target.watchlist)return toast('لیست نامعتبر');
+    const cur=getList(activeListId);
+    if(!cur.watchlist)return toast('فقط برای صف‌تماشا');
+    cur.linkedListId=targetId;
+    save(SK.lists,lists);
+    $('moveToListModal').classList.remove('show');
+    // آپدیت نمایش نام/وضعیت
+    const label=cur.name+' ⏳';
+    $('topTitle').textContent=label;$('lsName').textContent=label;
+    toast('صف‌تماشا وصل شد به «'+target.name+'»');
+    return;
+  }
+
+  // دیدم روی یک کارت
+  const it=items.find(x=>x.id===currentId);if(!it)return;
+  const parentList=getList(it.listId);
+  let destId=parentList.linkedListId;
+  const linkedOk=destId&&getList(destId)&&!getList(destId).watchlist;
+  if(!linkedOk){
+    if(!target||target.watchlist)return toast('لیست مقصد رو انتخاب کن');
+    destId=targetId;
+  }
+  const dest=getList(destId);
+  let rating=null;
+  const rv=$('moveRating').value;
+  if(rv!==''){
+    rating=Math.round(parseFloat(rv)*10)/10;
+    if(isNaN(rating)||rating<0||rating>10)return toast('نمره باید ۰ تا ۱۰ باشه');
+  } else {
+    return toast('نمره رو وارد کن');
+  }
+  it.listId=destId;
+  it.rating=rating;
+  it.updatedAt=Date.now();
+  save(SK.items,items);
+  activeListId=destId;
+  localStorage.setItem(SK.active,activeListId);
+  $('moveToListModal').classList.remove('show');
+  $('detailModal').classList.remove('show');
+  showScreen('List');
+  toast('دیدم → «'+dest.name+'» با نمره '+fa(rating));
+};
+$('closeMoveToList').onclick=()=>$('moveToListModal').classList.remove('show');
+
+// Episodes
+$('episodesBtn').onclick=async()=>{
+  const it=items.find(x=>x.id===currentId);if(!it)return;
+  $('epTitle').textContent='قسمت‌ها · '+it.title;
+  $('episodesBody').innerHTML='<p style="color:var(--muted)">در حال بارگذاری...</p>';
+  $('episodesModal').classList.add('show');
+
+  // If we have cached episodes use them, else fetch from OMDb
+  if(it.episodes&&it.episodes.length){
+    currentEpisodes=JSON.parse(JSON.stringify(it.episodes));
+    renderEpisodesEditor(currentEpisodes);
+    return;
+  }
+  if(!it.imdbID||!omdbKey){
+    $('episodesBody').innerHTML='<p style="color:var(--muted);margin-bottom:10px">برای بارگذاری خودکار فصل‌ها، کلید OMDb و جستجوی سریال لازم است.</p><p class="hint">می‌تونی دستی هم اضافه کنی:</p>';
+    currentEpisodes=[];
+    addManualEpisodeUI();
+    return;
+  }
+  try{
+    // get total seasons
+    const res=await fetch(`https://www.omdbapi.com/?apikey=${omdbKey}&i=${it.imdbID}`);
+    const d=await res.json();
+    const totalSeasons=parseInt(d.totalSeasons)||1;
+    const eps=[];
+    for(let s=1;s<=Math.min(totalSeasons,15);s++){
+      const sr=await fetch(`https://www.omdbapi.com/?apikey=${omdbKey}&i=${it.imdbID}&Season=${s}`);
+      const sd=await sr.json();
+      if(sd.Episodes){
+        sd.Episodes.forEach(ep=>{
+          eps.push({season:s,episode:parseInt(ep.Episode)||0,title:ep.Title||'',imdbRating:ep.imdbRating!=='N/A'?ep.imdbRating:'',rating:null});
+        });
+      }
+    }
+    currentEpisodes=eps;
+    // merge existing ratings if any
+    if(it.episodes){
+      it.episodes.forEach(old=>{
+        const m=currentEpisodes.find(e=>e.season===old.season&&e.episode===old.episode);
+        if(m&&old.rating!=null)m.rating=old.rating;
+      });
+    }
+    renderEpisodesEditor(currentEpisodes);
+  }catch(e){
+    console.error(e);
+    $('episodesBody').innerHTML='<p style="color:var(--danger)">خطا در دریافت قسمت‌ها</p>';
+    currentEpisodes=it.episodes||[];
+  }
+};
+
+function renderEpisodesEditor(eps){
+  if(!eps.length){$('episodesBody').innerHTML='<p style="color:var(--muted)">قسمتی نیست</p>';return}
+  const seasons=[...new Set(eps.map(e=>e.season))].sort((a,b)=>a-b);
+  let html='';
+  seasons.forEach((s,si)=>{
+    const seasonEps=eps.filter(e=>e.season===s);
+    const ratedN=seasonEps.filter(e=>e.rating!=null).length;
+    const open=si===0; // اولین فصل باز، بقیه بسته - برای سریال‌های پرقسمت
+    html+=`<div class="ep-season">
+      <button type="button" class="ep-season-head" data-toggle>
+        <span>فصل ${fa(s)} <span style="color:var(--muted);font-weight:500">(${fa(seasonEps.length)} قسمت)</span></span>
+        <span class="ep-season-meta">${fa(ratedN)}/${fa(seasonEps.length)} نمره‌دار <span class="ep-chevron"><i class="fa-solid fa-chevron-${open?'down':'left'}"></i></span></span>
+      </button>
+      <div class="ep-season-body" style="${open?'':'display:none'}">`;
+    seasonEps.forEach(e=>{
+      const idx=eps.indexOf(e);
+      html+=`<div class="ep-row">
+        <div class="ep-num">E${fa(e.episode)}</div>
+        <div class="ep-title">${esc(e.title)}</div>
+        <input type="number" min="0" max="10" step="0.1" placeholder="نمره" data-idx="${idx}" value="${e.rating!=null?e.rating:''}"/>
+      </div>`;
+    });
+    html+='</div></div>';
+  });
+  $('episodesBody').innerHTML=html;
+  $('episodesBody').querySelectorAll('.ep-season-head').forEach(h=>{
+    h.onclick=()=>{
+      const body=h.nextElementSibling;
+      const willOpen=body.style.display==='none';
+      body.style.display=willOpen?'block':'none';
+      h.querySelector('.ep-chevron').innerHTML=willOpen?'<i class="fa-solid fa-chevron-down"></i>':'<i class="fa-solid fa-chevron-left"></i>';
+    };
+  });
+}
+function addManualEpisodeUI(prevSeason){
+  const wrap=document.createElement('div');
+  wrap.style.cssText='display:flex;gap:6px;margin-top:10px;flex-wrap:wrap';
+  wrap.innerHTML=`
+    <input type="number" id="manEpSeason" min="1" placeholder="فصل" value="${prevSeason||1}" style="width:70px;padding:8px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit"/>
+    <input type="number" id="manEpNum" min="1" placeholder="قسمت" style="width:70px;padding:8px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit"/>
+    <input type="text" id="manEpTitle" placeholder="عنوان قسمت" style="flex:1;min-width:120px;padding:8px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit"/>
+    <button type="button" class="btn btn-ghost" id="manEpAddBtn" style="flex-shrink:0">افزودن قسمت</button>
+  `;
+  $('episodesBody').appendChild(wrap);
+  $('manEpAddBtn').onclick=()=>{
+    const s=parseInt($('manEpSeason').value)||1;
+    const e=parseInt($('manEpNum').value)||(currentEpisodes.filter(x=>x.season===s).length+1);
+    const t=$('manEpTitle').value.trim();
+    if(!t)return toast('عنوان قسمت رو بنویس');
+    currentEpisodes.push({season:s,episode:e,title:t,imdbRating:'',rating:null});
+    renderEpisodesEditor(currentEpisodes);
+    addManualEpisodeUI(s);
+    toast('قسمت اضافه شد');
+  };
+}
+
+$('saveEpisodes').onclick=()=>{
+  if(!currentEpisodes||!currentId)return;
+  $('episodesBody').querySelectorAll('input[data-idx]').forEach(inp=>{
+    const idx=parseInt(inp.dataset.idx);const v=inp.value;
+    currentEpisodes[idx].rating=v===''?null:Math.round(parseFloat(v)*10)/10;
+  });
+  const it=items.find(x=>x.id===currentId);
+  if(it){it.episodes=currentEpisodes;save(SK.items,items);toast('نمرات قسمت‌ها ذخیره شد')}
+  $('episodesModal').classList.remove('show');
+};
+$('closeEpisodes').onclick=()=>$('episodesModal').classList.remove('show');
+
+// Export / Import
+
+// ---------- خروجی گرفتن کارت به‌صورت عکس (عمودی/افقی) ----------
+function titleHue(t){let h=0;for(let i=0;i<(t||'').length;i++)h=(h*31+t.charCodeAt(i))%360;return h}
+function loadImageSafe(src){
+  return new Promise((resolve,reject)=>{
+    if(!src)return reject();
+    const img=new Image();
+    if(!src.startsWith('data:'))img.crossOrigin='anonymous';
+    img.onload=()=>resolve(img);
+    img.onerror=()=>reject();
+    img.src=src;
+  });
+}
+function drawCover(ctx,img,x,y,w,h){
+  const ir=img.width/img.height, tr=w/h;
+  let sx,sy,sw,sh;
+  if(ir>tr){sh=img.height;sw=sh*tr;sy=0;sx=(img.width-sw)/2}
+  else{sw=img.width;sh=sw/tr;sx=0;sy=(img.height-sh)/2}
+  ctx.drawImage(img,sx,sy,sw,sh,x,y,w,h);
+}
+function wrapCanvasText(ctx,text,x,y,maxWidth,lineHeight,maxLines,draw=true){
+  const words=(text||'').split(' ').filter(Boolean);
+  let line='',lines=[];
+  for(const w of words){
+    const test=line?line+' '+w:w;
+    if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=w}
+    else line=test;
+  }
+  if(line)lines.push(line);
+  if(maxLines&&lines.length>maxLines){lines=lines.slice(0,maxLines);lines[maxLines-1]=lines[maxLines-1].replace(/\s*$/,'')+'…'}
+  if(draw)lines.forEach((l,i)=>ctx.fillText(l,x,y+i*lineHeight));
+  return lines.length;
+}
+const CANVAS_FONT='"Noto Kufi Arabic", Vazirmatn, sans-serif';
+
+// طرح‌بندی محتوای متنیِ کارت. با draw=false فقط ارتفاع لازم رو حساب می‌کنه
+// (برای تعیین اندازه نهایی بوم)، با draw=true واقعاً رسم می‌کنه — تا دو حالت
+// هیچ‌وقت از هم عقب نیفتن.
+function layoutCardText(ctx,it,list,textX0,textX1,startY,draw){
+  const textW=textX1-textX0;
+  let y=startY;
+  ctx.textAlign='right';
+
+  ctx.font=`800 50px ${CANVAS_FONT}`;
+  if(draw)ctx.fillStyle='#fff';
+  const titleLines=wrapCanvasText(ctx,it.title||'بدون‌عنوان',textX1,y,textW-110,58,2,draw);
+  y+=titleLines*58+14;
+
+  const metaParts=[it.year,it.genre].filter(Boolean);
+  if(metaParts.length){
+    ctx.font=`600 30px ${CANVAS_FONT}`;
+    if(draw){ctx.fillStyle='#9090a0';ctx.fillText(metaParts.join('  ·  '),textX1,y)}
+    y+=46;
+  }
+
+  ctx.font=`700 24px ${CANVAS_FONT}`;
+  if(draw){ctx.fillStyle=list.color||'#ffc107';ctx.fillText('📁 '+(list.name||''),textX1,y)}
+  y+=44;
+
+  const tags=parseTags(it.tags);
+  if(tags.length){
+    if(draw){
+      let tx=textX1;
+      ctx.font=`600 24px ${CANVAS_FONT}`;
+      tags.slice(0,5).forEach(t=>{
+        const label='#'+t, tw=ctx.measureText(label).width+28;
+        if(tx-tw<textX0)return;
+        ctx.fillStyle='rgba(255,193,7,.15)';
+        ctx.beginPath();ctx.roundRect?ctx.roundRect(tx-tw,y-28,tw,36,18):ctx.rect(tx-tw,y-28,tw,36);ctx.fill();
+        ctx.fillStyle='#ffc107';ctx.fillText(label,tx-14,y-4);
+        tx-=tw+8;
+      });
+    }
+    y+=52;
+  }
+
+  // نقاط قوت / نقاط ضعف / یادداشت — هر کدوم جدا و کامل، نه فقط یکی
+  const noteSections=[
+    {label:'✓ نقاط قوت',color:'#32d74b',text:(it.notePros||'').trim()},
+    {label:'✕ نقاط ضعف',color:'#ff453a',text:(it.noteCons||'').trim()},
+    {label:'📝 یادداشت',color:'#c8c8d2',text:(it.notes||'').trim()}
+  ].filter(s=>s.text);
+
+  if(noteSections.length){
+    y+=8;
+    if(draw){ctx.strokeStyle='rgba(255,255,255,.14)';ctx.beginPath();ctx.moveTo(textX0,y);ctx.lineTo(textX1,y);ctx.stroke()}
+    y+=36;
+    noteSections.forEach(sec=>{
+      ctx.font=`700 24px ${CANVAS_FONT}`;
+      if(draw){ctx.fillStyle=sec.color;ctx.fillText(sec.label,textX1,y)}
+      y+=34;
+      ctx.font=`500 25px ${CANVAS_FONT}`;
+      if(draw)ctx.fillStyle='#c8c8d2';
+      const lines=wrapCanvasText(ctx,sec.text,textX1,y,textW,35,3,draw);
+      y+=lines*35+20;
+    });
+  }
+  return y;
+}
+
+async function exportCardImage(id,orientation){
+  const it=items.find(x=>x.id===id);if(!it)return;
+  const list=getList(it.listId);
+  toast('در حال ساخت عکس...');
+  const vertical=orientation==='vertical';
+  const W=vertical?1080:1600;
+  const pad=vertical?52:56;
+  const posterH=vertical?640:0;
+  const posterW=vertical?0:Math.round(W*.36);
+  const textX0=pad, textX1=vertical?W-pad:W-posterW-30;
+  const startY=vertical?(posterH+16+56):(pad+56+56);
+
+  // پاس اول (بدون رسم): فقط اندازه‌گیری تا ارتفاع واقعی لازم رو بفهمیم —
+  // همین‌جا باگ قبلی حل می‌شه که در حالت عمودی متن از پایین تصویر بیرون می‌زد.
+  const measureCanvas=document.createElement('canvas');
+  const mctx=measureCanvas.getContext('2d');
+  mctx.direction='rtl';
+  const contentEndY=layoutCardText(mctx,it,list,textX0,textX1,startY,false);
+  const H=Math.max(vertical?1150:900, contentEndY+90);
+
+  const canvas=document.createElement('canvas');canvas.width=W;canvas.height=H;
+  const ctx=canvas.getContext('2d');
+  ctx.direction='rtl';
+
+  const bgGrad=ctx.createLinearGradient(0,0,0,H);
+  bgGrad.addColorStop(0,'#111116');bgGrad.addColorStop(1,'#0a0a0d');
+  ctx.fillStyle=bgGrad;ctx.fillRect(0,0,W,H);
+
+  const src=imgOf(it);
+  let posterImg=null;
+  if(src){try{posterImg=await loadImageSafe(src)}catch{posterImg=null}}
+
+  const rColor=ratingColor(it.rating);
+  const hue=titleHue(it.title);
+
+  function drawPlaceholder(x,y,w,h){
+    const g=ctx.createLinearGradient(x,y,x,y+h);
+    g.addColorStop(0,`hsl(${hue},38%,26%)`);g.addColorStop(1,`hsl(${hue},32%,14%)`);
+    ctx.fillStyle=g;ctx.fillRect(x,y,w,h);
+    ctx.fillStyle='rgba(255,255,255,.25)';
+    ctx.font=`700 ${Math.round(h*.32)}px ${CANVAS_FONT}`;
+    ctx.textAlign='center';ctx.direction='ltr';
+    ctx.fillText((it.title||'?').trim().charAt(0).toUpperCase(),x+w/2,y+h/2+h*.11);
+    ctx.direction='rtl';
+  }
+
+  if(vertical){
+    if(posterImg){
+      // پس‌زمینه محو‌شده تمام‌عرض (cover) + خود پوستر کامل و بدون بریدگی (contain) روش
+      ctx.save();
+      ctx.filter='blur(24px) brightness(.5)';
+      drawCover(ctx,posterImg,-20,-20,W+40,posterH+40);
+      ctx.restore();
+      const ir=posterImg.width/posterImg.height;
+      let dw=W*.86,dh=dw/ir;
+      if(dh>posterH*.94){dh=posterH*.94;dw=dh*ir}
+      const dx=(W-dw)/2, dy=(posterH-dh)/2;
+      ctx.save();
+      ctx.shadowColor='rgba(0,0,0,.5)';ctx.shadowBlur=30;
+      ctx.drawImage(posterImg,dx,dy,dw,dh);
+      ctx.restore();
+    }
+    else drawPlaceholder(0,0,W,posterH);
+    const fade=ctx.createLinearGradient(0,posterH-220,0,posterH);
+    fade.addColorStop(0,'rgba(10,10,13,0)');fade.addColorStop(1,'#0a0a0d');
+    ctx.fillStyle=fade;ctx.fillRect(0,posterH-220,W,220);
+  } else {
+    if(posterImg)drawCover(ctx,posterImg,W-posterW,0,posterW,H);
+    else drawPlaceholder(W-posterW,0,posterW,H);
+    const fade=ctx.createLinearGradient(W-posterW-200,0,W-posterW,0);
+    fade.addColorStop(0,'rgba(10,10,13,0)');fade.addColorStop(1,'#0a0a0d');
+    ctx.fillStyle=fade;ctx.fillRect(W-posterW-200,0,200,H);
+  }
+
+  ctx.textAlign='right';
+
+  // نمره بزرگ رنگی، گوشهٔ بالای پوستر
+  if(it.rating!=null&&it.rating!==''){
+    const cx=textX1-52, cy=vertical?68:64, r=44;
+    ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);
+    ctx.fillStyle='rgba(0,0,0,.55)';ctx.fill();
+    ctx.lineWidth=5;ctx.strokeStyle=rColor;ctx.stroke();
+    ctx.fillStyle=rColor;ctx.font=`800 34px ${CANVAS_FONT}`;ctx.textAlign='center';
+    ctx.direction='ltr';ctx.fillText(String(it.rating),cx,cy+12);ctx.direction='rtl';
+    ctx.textAlign='right';
+  }
+
+  // پاس دوم: رسم واقعی متن، دقیقاً با همون طرح‌بندیِ اندازه‌گیری‌شده
+  layoutCardText(ctx,it,list,textX0,textX1,startY,true);
+
+  ctx.fillStyle='rgba(255,255,255,.35)';ctx.font=`700 24px ${CANVAS_FONT}`;
+  ctx.textAlign='right';ctx.fillText('★ نمره‌دهی',textX1,H-30);
+
+  canvas.toBlob(blob=>{
+    if(!blob){toast('ساخت عکس ناموفق بود');return}
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+    a.download=(it.title||'item').replace(/[\\/:*?"<>|]/g,'-')+'-'+(vertical?'عمودی':'افقی')+'.png';
+    a.click();URL.revokeObjectURL(a.href);
+    toast('عکس دانلود شد');
+  },'image/png');
+}
+
+// ---------- خروجی «فقط نمایش» — یه فایل HTML مستقل می‌سازه که هرکی بازش کنه
+// فقط می‌تونه ببینه، نه اضافه/ویرایش/حذف کنه. برای فرستادن به یه نفر دیگه. ----------
+function exportViewOnly(){
+  try{
+    toast('در حال ساخت فایل...');
+    const list=getList(activeListId);
+    const listItems=items.filter(i=>i.listId===activeListId);
+    const data={lists:[list],items:listItems,itemOrder:{[activeListId]:itemOrder[activeListId]||[]}};
+    const dataJson=JSON.stringify(data).replace(/</g,'\\u003c');
+    let html='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
+    html=html.replace(
+      /\/\*VIEWONLY_FLAG_START\*\/let VIEW_ONLY=false;\/\*VIEWONLY_FLAG_END\*\//,
+      '/*VIEWONLY_FLAG_START*/let VIEW_ONLY=true;/*VIEWONLY_FLAG_END*/'
+    );
+    html=html.replace(
+      /\/\*EMBEDDED_DATA_START\*\/let EMBEDDED_DATA=null;\/\*EMBEDDED_DATA_END\*\//,
+      '/*EMBEDDED_DATA_START*/let EMBEDDED_DATA='+dataJson+';/*EMBEDDED_DATA_END*/'
+    );
+    const blob=new Blob([html],{type:'text/html'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='نمره‌دهی-اشتراکی-'+new Date().toISOString().slice(0,10)+'.html';
+    a.click();URL.revokeObjectURL(a.href);
+    toast('فایل فقط‌نمایش ساخته شد — این رو بفرست');
+  }catch(e){console.error(e);toast('خطا در ساخت فایل خروجی')}
+}
+
+async function doExport(){
+  const def=`imdb-backup-${new Date().toISOString().slice(0,10)}.json`;
+  const data={version:6,exportedAt:new Date().toISOString(),lists,items,itemOrder};
+  const text=JSON.stringify(data,null,2);
+
+  // مرورگرهای مدرن (کروم/اج/سامسونگ اینترنت): پنجره «ذخیره به‌عنوان» واقعی سیستم،
+  // که می‌شه یکی از فایل‌های قبلی رو انتخاب کرد و به‌جاش ذخیره کرد.
+  if(window.showSaveFilePicker){
+    try{
+      const handle=await window.showSaveFilePicker({
+        suggestedName:def,
+        types:[{description:'پشتیبان JSON',accept:{'application/json':['.json']}}]
+      });
+      const writable=await handle.createWritable();
+      await writable.write(text);
+      await writable.close();
+      toast('ذخیره شد: '+handle.name);
+      return;
+    }catch(e){
+      if(e && e.name==='AbortError')return; // کاربر خودش لغو کرد
+      console.error(e); // بقیه خطاها: برو سراغ روش قدیمی (دانلود مستقیم)
+    }
+  }
+  let name=prompt('اسم فایل پشتیبان:',def);if(name===null)return;
+  name=(name.trim()||def);if(!name.toLowerCase().endsWith('.json'))name+='.json';
+  name=name.replace(/[\\/:*?"<>|]/g,'-');
+  const blob=new Blob([text],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();
+  URL.revokeObjectURL(a.href);toast('دانلود شد: '+name);
+}
+
+$('importFile').onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();r.onload=ev=>{
+    try{const d=JSON.parse(ev.target.result);if(!d.lists||!d.items)return toast('فایل نامعتبر');pendingImport=d;$('importModal').classList.add('show')}
+    catch{toast('خطا در خواندن')}
+    e.target.value='';
+  };r.readAsText(f);
+};
+function itemKey(it){return((it.title||'').toLowerCase().trim()+'|'+(it.year||'')).trim()}
+$('importReplace').onclick=()=>{
+  if(!pendingImport)return;
+  lists=pendingImport.lists;items=pendingImport.items;itemOrder=pendingImport.itemOrder||{};
+  items.forEach(i=>{if(!i.listId)i.listId=lists[0]?.id;if(!i.tags)i.tags='';if(!i.episodes)i.episodes=[];if(i.favorite==null)i.favorite=false});
+  activeListId=lists[0]?.id||'default';
+  save(SK.lists,lists);save(SK.items,items);save(SK.order,itemOrder);localStorage.setItem(SK.active,activeListId);
+  pendingImport=null;$('importModal').classList.remove('show');showScreen('Home');toast('جایگزین شد');
+};
+$('importMerge').onclick=()=>{
+  if(!pendingImport)return;
+  const listIdMap={};
+  pendingImport.lists.forEach(pl=>{
+    const existing=lists.find(l=>l.name===pl.name);
+    if(existing)listIdMap[pl.id]=existing.id;
+    else{const nid=uid();listIdMap[pl.id]=nid;lists.push({...pl,id:nid})}
+  });
+  const existingKeys=new Set(items.map(itemKey));let added=0;
+  pendingImport.items.forEach(pi=>{
+    const key=itemKey(pi);if(existingKeys.has(key))return;
+    items.push({...pi,id:uid(),listId:listIdMap[pi.listId]||lists[0].id,tags:pi.tags||'',episodes:pi.episodes||[],favorite:!!pi.favorite});
+    existingKeys.add(key);added++;
+  });
+  save(SK.lists,lists);save(SK.items,items);pendingImport=null;$('importModal').classList.remove('show');showScreen('Home');
+  toast(added?fa(added)+' آیتم جدید اضافه شد':'چیز جدیدی نبود');
+};
+
+$('doTextImport').onclick=()=>{
+  const lines=$('textImportArea').value.split('\n').map(l=>l.trim()).filter(Boolean);
+  let added=0;
+  lines.forEach(line=>{
+    const parts=line.split(/[,،]/).map(s=>s.trim());
+    if(!parts[0])return;
+    const title=parts[0];const year=parts[1]||null;let rating=null;
+    if(parts[2]){rating=parseFloat(parts[2]);if(isNaN(rating))rating=null}
+    // skip dups
+    if(items.some(i=>i.listId===activeListId&&itemKey(i)===itemKey({title,year})))return;
+    items.unshift({id:uid(),createdAt:Date.now(),title,year,rating,listId:activeListId,tags:'',episodes:[],genre:'',notes:'',favorite:false});
+    added++;
+  });
+  save(SK.items,items);$('textImportModal').classList.remove('show');
+  if($('screenList').classList.contains('active'))renderItems();
+  toast(fa(added)+' آیتم اضافه شد');
+};
+
+function findDups(){
+  const list=items.filter(i=>i.listId===activeListId);
+  const map={};list.forEach(i=>{const k=itemKey(i);if(!map[k])map[k]=[];map[k].push(i)});
+  const dups=Object.values(map).filter(a=>a.length>1);
+  if(!dups.length)return toast('تکراری پیدا نشد');
+  const msg=dups.map(a=>`«${a[0].title}» (${a[0].year||'?'}) × ${a.length}`).join('\n');
+  alert('تکراری‌ها:\n'+msg);
+}
+
+// Global search
+$('globalSearchInput').oninput=debounce(()=>{
+  const q=$('globalSearchInput').value.trim().toLowerCase();
+  if(!q){$('globalSearchResults').innerHTML='';return}
+  const hits=items.filter(i=>(i.title||'').toLowerCase().includes(q)||(i.genre||'').toLowerCase().includes(q)||(i.tags||'').toLowerCase().includes(q)).slice(0,30);
+  $('globalSearchResults').innerHTML=hits.map(i=>{
+    const l=getList(i.listId);
+    return `<div class="lookup-item" data-id="${i.id}" data-lid="${i.listId}">
+      <div><div class="t">${esc(i.title)}</div><div class="m">${esc(l.name)} · ${i.year||''} ${i.rating!=null?'★'+i.rating:''}</div></div>
+    </div>`;
+  }).join('')||'<p style="color:var(--muted);padding:10px">چیزی پیدا نشد</p>';
+  $('globalSearchResults').querySelectorAll('.lookup-item').forEach(el=>{
+    el.onclick=()=>{
+      activeListId=el.dataset.lid;localStorage.setItem(SK.active,activeListId);
+      $('globalSearchModal').classList.remove('show');showScreen('List');openDetail(el.dataset.id);
+    };
+  });
+},220);
+
+$('saveKeys').onclick=()=>{
+  omdbKey=$('omdbKey').value.trim();
+  rawgKey=$('rawgKey').value.trim();
+  localStorage.setItem(SK.omdb,omdbKey);
+  localStorage.setItem(SK.rawg,rawgKey);
+  $('keyModal').classList.remove('show');toast('ذخیره شد');
+};
+
+// Closes
+['closeDetail','closeListModal','closeImport','closeTextImport','closeGlobalSearch','closeKey','closeHelp','closeAddChoice','closeImgExport','closeMoveToList','closeSuggest','closeSuggestAdd','closeAuth'].forEach(id=>{
+  const el=$(id);if(el)el.onclick=()=>el.closest('.modal-bg').classList.remove('show');
+});
+
+/* ---------- UI ورود / ثبت‌نام ابری ---------- */
+$('openAuthBtn')&&($('openAuthBtn').onclick=()=>{
+  $('overlay').classList.remove('show');$('sideMenu').classList.remove('show');
+  openAuthModal('login');
+});
+$('authTabLogin')&&($('authTabLogin').onclick=()=>setAuthMode('login'));
+$('authTabSignup')&&($('authTabSignup').onclick=()=>setAuthMode('signup'));
+$('authTogglePw')&&($('authTogglePw').onclick=()=>{
+  const inp=$('authPassword');if(!inp)return;
+  const show=inp.type==='password';
+  inp.type=show?'text':'password';
+  $('authTogglePw').innerHTML=show?'<i class="fa-solid fa-eye-slash"></i>':'<i class="fa-solid fa-eye"></i>';
+});
+$('cloudSaveBtn')&&($('cloudSaveBtn').onclick=()=>{
+  $('overlay').classList.remove('show');$('sideMenu').classList.remove('show');
+  saveToCloud();
+});
+$('cloudLoadBtn')&&($('cloudLoadBtn').onclick=()=>{
+  $('overlay').classList.remove('show');$('sideMenu').classList.remove('show');
+  loadFromCloud();
+});
+$('cloudLogoutBtn')&&($('cloudLogoutBtn').onclick=()=>{
+  $('overlay').classList.remove('show');$('sideMenu').classList.remove('show');
+  cloudSignOut();
+});
+$('authForm')&&($('authForm').onsubmit=async(e)=>{
+  e.preventDefault();
+  const email=($('authEmail')?.value||'').trim();
+  const username=($('authUsername')?.value||'').trim();
+  const password=$('authPassword')?.value||'';
+  showAuthError('');
+  if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+    return showAuthError('یک ایمیل معتبر وارد کن (مثل name@gmail.com)');
+  if(password.length<6)return showAuthError('رمز حداقل ۶ کاراکتر باشد');
+  if(username && !/^[A-Za-z0-9_\u0600-\u06FF]+$/.test(username))
+    return showAuthError('نام نمایشی فقط حرف، عدد و _ باشد');
+  const btn=$('authSubmit');
+  if(btn){btn.disabled=true;btn.textContent='صبر کن...'}
+  try{
+    if(authMode==='signup'){
+      const data = await cloudSignUp(email,password,username);
+      // اگر Confirm email روشن باشد، معمولاً session نیست تا لینک ایمیل زده شود
+      const hasSession = !!(data && data.session);
+      if(hasSession){
+        toast('اکانت ساخته شد ✓');
+        await refreshCloudSession();
+        $('authModal')?.classList.remove('show');
+        if(currentCloudUser){
+          setTimeout(()=>{ if(confirm('داده‌هات رو از ابر بارگذاری کنم؟')) loadFromCloud(); }, 400);
+        }
+      } else {
+        showAuthError('');
+        toast('لینک تأیید به ایمیلت ارسال شد');
+        if($('authHeroTitle')) $('authHeroTitle').textContent = 'ایمیلت را چک کن';
+        if($('authHeroSub')) $('authHeroSub').textContent = 'روی لینک داخل ایمیل بزن، بعد از اینجا وارد شو';
+        setAuthMode('login');
+        if($('authEmail')) $('authEmail').value = email;
+        if($('authPassword')) $('authPassword').value = '';
+        showAuthError('یک ایمیل تأیید فرستادیم. لینک را باز کن، بعد با همین ایمیل و رمز وارد شو.');
+      }
+    } else {
+      await cloudSignIn(email,password);
+      toast('خوش اومدی ✓');
+      await refreshCloudSession();
+      $('authModal')?.classList.remove('show');
+      if(currentCloudUser){
+        setTimeout(()=>{ if(confirm('داده‌هات رو از ابر بارگذاری کنم؟')) loadFromCloud(); }, 400);
+      }
+    }
+  }catch(err){
+    const msg=(err&&err.message)||'خطا در اتصال';
+    const isLocal = /^(file:|content:)/i.test(location.protocol) || location.protocol === 'file:';
+    if(/already registered|already been registered|User already/i.test(msg))
+      showAuthError('این ایمیل قبلاً ثبت شده — برو به ورود');
+    else if(/Invalid login credentials|invalid_credentials/i.test(msg))
+      showAuthError('ایمیل یا رمز اشتباه است');
+    else if(/Email not confirmed/i.test(msg))
+      showAuthError('ایمیلت را تأیید کن (لینک داخل اینباکس) یا در پنل Supabase تأیید ایمیل را خاموش کن');
+    else if(/rate limit|email rate limit/i.test(msg))
+      showAuthError('تعداد درخواست‌ها زیاد شده. چند دقیقه صبر کن یا تأیید ایمیل را در Supabase خاموش کن.');
+    else if(/Failed to fetch|NetworkError|network|fetch/i.test(msg))
+      showAuthError(isLocal
+        ? 'اتصال به سرور برقرار نشد. فایل را از مرورگر با آدرس http باز کن (نه مستقیم از حافظه گوشی). اینترنت را هم چک کن.'
+        : 'اتصال به سرور برقرار نشد. اینترنت و آدرس پروژه Supabase را چک کن.');
+    else
+      showAuthError(msg);
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent=authMode==='login'?'ورود':'ساخت اکانت'}
+  }
+});
+// وضعیت اولیه کاربر ابری
+refreshCloudSession();
+supabaseClient.auth.onAuthStateChange((_event, session)=>{
+  if(session?.user){
+    const u=session.user;
+    currentCloudUser={id:u.id,email:u.email,username:(u.user_metadata&&u.user_metadata.username)||null};
+  } else currentCloudUser=null;
+  updateUserCard();
+});
+
+document.querySelectorAll('.modal-bg').forEach(m=>{m.onclick=e=>{if(e.target===m){
+  if(m.id==='formModal')tryCloseForm();else m.classList.remove('show');
+}}});
+
+$('fab').onclick=()=>{if(VIEW_ONLY)return;$('addChoiceModal').classList.add('show')};
+$('addChoiceSingle').onclick=()=>{$('addChoiceModal').classList.remove('show');openForm()};
+$('addChoiceText').onclick=()=>{$('addChoiceModal').classList.remove('show');$('textImportArea').value='';$('textImportModal').classList.add('show')};
+
+// Keyboard shortcuts (desktop)
+document.addEventListener('keydown',e=>{
+  if(e.altKey||e.ctrlKey||e.metaKey)return;
+  const tag=(e.target.tagName||'').toLowerCase();
+  const typing=tag==='input'||tag==='textarea'||tag==='select'||e.target.isContentEditable;
+
+  if(e.key==='Escape'){
+    if($('posterFull').classList.contains('show')){$('posterFull').classList.remove('show');return}
+    hideCtx();
+    const openModal=[...document.querySelectorAll('.modal-bg.show')].pop();
+    if(openModal){if(openModal.id==='formModal')tryCloseForm();else openModal.classList.remove('show');return}
+    if($('sideMenu').classList.contains('show')){$('overlay').classList.remove('show');$('sideMenu').classList.remove('show');return}
+    if($('screenList').classList.contains('active')){showScreen('Home');return}
+    return;
+  }
+
+  if(typing)return;
+
+  // میان‌برهای جزئیات (حتی وقتی مودال بازه)
+  if($('detailModal').classList.contains('show')&&currentId&&!VIEW_ONLY){
+    if(e.key==='f'||e.key==='F'){e.preventDefault();$('favToggleBtn').click();return}
+    if(e.key==='p'||e.key==='P'){e.preventDefault();$('pinBtn').click();return}
+  }
+
+  if(document.querySelector('.modal-bg.show'))return; // بقیه میان‌برها زیر مودال کار نکنن
+
+  if(e.key==='/'){
+    e.preventDefault();
+    if($('screenList').classList.contains('active'))$('searchInput').focus();
+    else{$('globalSearchInput').value='';$('globalSearchResults').innerHTML='';$('globalSearchModal').classList.add('show');setTimeout(()=>$('globalSearchInput').focus(),50)}
+    return;
+  }
+  if((e.key==='n'||e.key==='N')&&$('screenList').classList.contains('active')&&!VIEW_ONLY){
+    e.preventDefault();$('addChoiceModal').classList.add('show');return;
+  }
+  if((e.key==='s'||e.key==='S')&&$('screenList').classList.contains('active')&&!VIEW_ONLY){
+    e.preventDefault();exportViewOnly();return;
+  }
+  if((e.key==='ArrowRight'||e.key==='ArrowLeft')&&$('screenList').classList.contains('active')){
+    e.preventDefault();switchList(e.key==='ArrowRight'?-1:1);return;
+  }
+});
+
+// Restore screen on load
+if($('sortSelect'))$('sortSelect').value=sortMode;
+const savedScreen=localStorage.getItem(SK.screen)||'Home';
+if(savedScreen==='List'&&lists.some(l=>l.id===activeListId))showScreen('List');
+else showScreen('Home');
+
+})();
+</script>
+</body>
+</html>
